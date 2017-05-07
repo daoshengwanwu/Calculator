@@ -41,13 +41,16 @@ abstract class ExpItem {
 	 * 操作数类
 	 */
 	public static class Operand extends ExpItem {
+		private static final double PRECISION = 10e-15;
+		private static final double AUXILIARY = 1 / PRECISION;
+		
 		private double mValue;
 		
 		
 		public Operand(double value) {
 			super(ItemType.OPERAND);
 			
-			mValue = value;
+			mValue = precision(value);
 		}//con_Operand
 		
 		public void setValue(double value) {
@@ -58,7 +61,25 @@ abstract class ExpItem {
 			return mValue;
 		}//getValue
 		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Operand)) {
+				return false;
+			}//if
+			
+			Operand operand = (Operand)obj;
+			return Math.abs(Math.abs(mValue) - Math.abs(operand.getValue())) < PRECISION;
+		}//equals
 		
+		@Override
+		public String toString() {
+			return String.valueOf(mValue);
+		}//toString
+		
+		//将value置为PRECISION指定的精度
+		private double precision(double value) {
+			return Math.round(value * AUXILIARY) / AUXILIARY;
+		}//precision
 	}//class_Operand
 	
 	/*
