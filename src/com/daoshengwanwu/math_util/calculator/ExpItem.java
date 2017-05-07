@@ -1,5 +1,7 @@
 package com.daoshengwanwu.math_util.calculator;
 
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  * 该类的对象为构成表达式的项，是构成AriExp以及VarAriExp的基本单位
@@ -31,10 +33,53 @@ abstract class ExpItem {
 	/*
 	 * 运算符类
 	 */
-	public static class Operator extends ExpItem {
-		public Operator() {
+	public static abstract class Operator extends ExpItem {
+		private final int mPriority; //运算符优先级
+		
+		
+		public static Operator getOperator(String operatorStr) {
+			return OperatorAssistant.getOperator(operatorStr);
+		}//getOperator
+		
+		public Operator(int priority) {
 			super(ItemType.OPERATOR);
+			
+			mPriority = priority;
 		}//con_Operator		
+		
+		public int getPriority() {
+			return mPriority;
+		}//getPriority
+		
+		public abstract double operate(Operand[] operands);
+		
+		public abstract int getDimension();
+		
+		public abstract OperatorType getOperatorType();
+		
+		
+		public static enum OperatorType {
+			LEFT_REQUIRED, RIGHT_REQUIRED, DOUBLE_REQUERED;
+		}//enum_OperatorType
+		
+		
+		/*
+		 * 运算符助手
+		 * 可以根据运算符的字符串描述返回对应的Operator对象, 并且这个Operator在应用的整个运行过程中，只会存在一个实例
+		 * 
+		 */
+		public static class OperatorAssistant {
+			private static Map<String, Operator> mStrOperatorMap = new HashMap<>();
+			
+			
+			public static Operator getOperator(String operatorStr) {
+				return null;
+			}
+			
+			private static Operator newOperator(String operatorStr) {
+				return null;
+			}
+		}//class_OperatorAssistant
 	}//class_Operator
 	
 	/*
