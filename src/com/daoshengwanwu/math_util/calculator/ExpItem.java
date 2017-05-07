@@ -81,7 +81,7 @@ abstract class ExpItem {
 		
 		
 		public static enum OperatorType {
-			LEFT_REQUIRED, RIGHT_REQUIRED, DOUBLE_REQUERED;
+			LEFT_REQUIRED, RIGHT_REQUIRED, DOUBLE_REQUERED, OPEN, CLOSE;
 		}//enum_OperatorType
 		
 		
