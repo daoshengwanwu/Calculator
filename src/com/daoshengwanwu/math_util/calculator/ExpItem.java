@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.daoshengwanwu.math_util.calculator.exception.IllegalIdentifierException;
 import com.daoshengwanwu.math_util.calculator.exception.OperandNumException;
+import com.daoshengwanwu.math_util.calculator.exception.SpecDirPriorNotExistException;
 
 
 /*
@@ -41,8 +42,6 @@ abstract class ExpItem {
 	public static abstract class Operator extends ExpItem {
 		public static final String START_FLAT = "START_FLAG";
 		
-		
-		private final int mPriority; //运算符优先级
 		private final String mOperatorStr; //运算符的字符串描述
 		
 		
@@ -50,16 +49,19 @@ abstract class ExpItem {
 			return OperatorAssistant.getOperator(operatorStr);
 		}//getOperator
 		
-		public Operator(int priority, String operatorStr) {
+		public Operator(String operatorStr) {
 			super(ItemType.OPERATOR);
 			
-			mPriority = priority;
 			mOperatorStr = operatorStr;
 		}//con_Operator		
 		
-		public int getPriority() {
-			return mPriority;
-		}//getPriority
+		public int getLeftDirPriority() throws SpecDirPriorNotExistException {
+			throw new SpecDirPriorNotExistException(getOperatorStr(), "左");
+		}//getLeftDirPriority
+		
+		public int getRightDirPriority() throws SpecDirPriorNotExistException {
+			throw new SpecDirPriorNotExistException(getOperatorStr(), "右");
+		}//getRightDirPriority
 		
 		public String getOperatorStr() {
 			return mOperatorStr;
@@ -107,10 +109,10 @@ abstract class ExpItem {
 				
 				//--------------在这个switch里添加运算符的字符串描述与实际运算符类的对应--------------------
 				switch (operatorStr) {
-				case "+": operator = new Add(1, "+"); break;
-				case "-": operator = new Sub(1, "-"); break;
-				case "*": operator = new Mul(2, "*"); break;
-				case "/": operator = new Div(2, "/"); break;
+				case "+": operator = new Add(1, 1, "+"); break;
+				case "-": operator = new Sub(1, 1, "-"); break;
+				case "*": operator = new Mul(2, 2, "*"); break;
+				case "/": operator = new Div(2, 2, "/"); break;
 				default: throw new IllegalIdentifierException(operatorStr);
 				}//switch
 				
@@ -118,16 +120,71 @@ abstract class ExpItem {
 			}//newOperator
 		}//class_OperatorAssistant
 		
+		private static abstract class DoubleDirOperator extends Operator {
+			private final int mLeftDirPriority;
+			private final int mRightDirPriority;
+			
+			
+			public DoubleDirOperator(int leftPriority, int rightPriority, String operatorStr) {
+				super(operatorStr);
+				
+				mLeftDirPriority = leftPriority;
+				mRightDirPriority = rightPriority;
+			}//con_DoubleDirOperator
+			
+			@Override
+			public int getLeftDirPriority() {
+				return mLeftDirPriority;
+			}//getLeftDirPriority
+			
+			@Override
+			public int getRightDirPriority() {
+				return mRightDirPriority;
+			}//getRightDirPriority
+		}
+		
+		private static abstract class LeftSingleDirOperator extends Operator {
+			private final int mLeftDirPriority;
+			
+			
+			public LeftSingleDirOperator(int leftDirPriority, String operatorStr) {
+				super(operatorStr);
+				
+				mLeftDirPriority = leftDirPriority;
+			}//con_LeftSingleDirOperator
+			
+			@Override
+			public int getLeftDirPriority() {
+				return mLeftDirPriority;
+			}//getLeftDirPriority
+		}//class_LeftSingleDirOperator
+		
+		private static abstract class RightSingleDirOperator extends Operator {
+			private final int mRightDirPriority;
+			
+			
+			public RightSingleDirOperator(int rightDirPriority, String operatorStr) {
+				super(operatorStr);
+				
+				mRightDirPriority = rightDirPriority;
+			}//con_LeftSingleDirOperator
+			
+			@Override
+			public int getRightDirPriority() {
+				return mRightDirPriority;
+			}//getLeftDirPriority
+		}//class_LeftSingleDirOperator
+		
 		/*
 		 * 加法运算符对应的类
 		 */
-		private static class Add extends Operator {
+		private static class Add extends DoubleDirOperator {
 			private static final OperatorType ADD_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
 			private static final int ADD_OPERATOR_DIMENSION = 2;
 			
 			
-			public Add(int priority, String operatorStr) {
-				super(priority, operatorStr);
+			public Add(int leftPriority, int rightPriority, String operatorStr) {
+				super(leftPriority, rightPriority, operatorStr);
 			}//con_Add
 
 			@Override
@@ -151,14 +208,14 @@ abstract class ExpItem {
 			}//getOperatorType
 		}//class_Add
 		
-		private static class Sub extends Operator {
+		private static class Sub extends DoubleDirOperator {
 			private static final OperatorType SUB_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
 			private static final int SUB_OPERATOR_DIMENSION = 2;
 			
 
-			public Sub(int priority, String operatorStr) {
-				super(priority, operatorStr);
-			}
+			public Sub(int leftPriority, int rightPriority, String operatorStr) {
+				super(leftPriority, rightPriority, operatorStr);
+			}//con_Sub        
 
 			@Override
 			public Operand operate(Operand[] operands) throws OperandNumException {
@@ -181,13 +238,13 @@ abstract class ExpItem {
 			}
 		}//class_Sub
 		
-		private static class Mul extends Operator {
+		private static class Mul extends DoubleDirOperator {
 			private static final OperatorType MUL_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
 			private static final int MUL_OPERATOR_DIMENSION = 2;
 			
 			
-			public Mul(int priority, String operatorStr) {
-				super(priority, operatorStr);
+			public Mul(int leftPriority, int rightPriority, String operatorStr) {
+				super(leftPriority, rightPriority, operatorStr);
 			}
 
 			@Override
@@ -211,13 +268,13 @@ abstract class ExpItem {
 			}
 		}//class_Mul
 		
-		private static class Div extends Operator {
+		private static class Div extends DoubleDirOperator {
 			private static final OperatorType DIV_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
 			private static final int DIV_OPERATOR_DIMENSION = 2;
 			
 			
-			public Div(int priority, String operatorStr) {
-				super(priority, operatorStr);
+			public Div(int leftPriority, int rightPriority, String operatorStr) {
+				super(leftPriority, rightPriority, operatorStr);
 			}
 
 			@Override
