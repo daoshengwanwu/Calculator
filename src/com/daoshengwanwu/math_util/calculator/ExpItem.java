@@ -35,27 +35,39 @@ abstract class ExpItem {
 	 */
 	public static abstract class Operator extends ExpItem {
 		private final int mPriority; //运算符优先级
+		private final String mOperatorStr; //运算符的字符串描述
 		
 		
 		public static Operator getOperator(String operatorStr) {
 			return OperatorAssistant.getOperator(operatorStr);
 		}//getOperator
 		
-		public Operator(int priority) {
+		public Operator(int priority, String operatorStr) {
 			super(ItemType.OPERATOR);
 			
 			mPriority = priority;
+			mOperatorStr = operatorStr;
 		}//con_Operator		
 		
 		public int getPriority() {
 			return mPriority;
 		}//getPriority
 		
-		public abstract double operate(Operand[] operands);
+		public String getOperatorStr() {
+			return mOperatorStr;
+		}//getOperatorStr
+		
+		public abstract Operand operate(Operand[] operands) throws OperandNumException;
 		
 		public abstract int getDimension();
 		
 		public abstract OperatorType getOperatorType();
+		
+		protected void checkOperandNumCorrect(int actualOperandNum) throws OperandNumException {
+			if (actualOperandNum != getDimension()) {
+				throw new OperandNumException(getOperatorStr(), getDimension(), actualOperandNum);
+			}//if
+		}//ifOperandNumCorrect
 		
 		
 		public static enum OperatorType {
@@ -69,17 +81,64 @@ abstract class ExpItem {
 		 * 
 		 */
 		public static class OperatorAssistant {
-			private static Map<String, Operator> mStrOperatorMap = new HashMap<>();
+			private static Map<String, Operator> sStrOperatorMap = new HashMap<>();
 			
 			
 			public static Operator getOperator(String operatorStr) {
-				return null;
-			}
+				Operator operator = sStrOperatorMap.get(operatorStr);
+				
+				if (null != operator) {
+					return operator;
+				}//if
+				
+				return newOperator(operatorStr);
+			}//getOperator
 			
 			private static Operator newOperator(String operatorStr) {
-				return null;
-			}
+				Operator operator = null;
+				
+				//-------------在这个switch里添加运算符的字符串描述与实际运算符类的对应
+				switch (operatorStr) {
+				case "+": operator = new Add(1, "+"); break;
+				default: break;
+				}//switch
+				
+				return operator;
+			}//newOperator
 		}//class_OperatorAssistant
+		
+		/*
+		 * 加法运算符对应的类
+		 */
+		private static class Add extends Operator {
+			private static final OperatorType ADD_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
+			private static final int ADD_OPERATOR_DIMENTION = 2;
+			
+			
+			public Add(int priority, String operatorStr) {
+				super(priority, operatorStr);
+			}//con_Add
+
+			@Override
+			public Operand operate(Operand[] operands) throws OperandNumException {
+				checkOperandNumCorrect(operands.length);
+				
+				double leftOperand = operands[0].getValue();
+				double rightOperand = operands[1].getValue();
+				
+				return new Operand(leftOperand + rightOperand);
+			}//operate
+
+			@Override
+			public int getDimension() {
+				return ADD_OPERATOR_DIMENTION;
+			}//getDimentsion
+
+			@Override
+			public OperatorType getOperatorType() {
+				return ADD_OPERATOR_TYPE;
+			}//getOperatorType
+		}//class_Add
 	}//class_Operator
 	
 	/*
