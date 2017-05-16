@@ -45,6 +45,7 @@ abstract class ExpItem {
 		
 		private final String mOperatorStr; //运算符的字符串描述
 		
+		
 		//通过该静态方法，来获取operatorStr确定的Operator对象
 		public static Operator getOperator(String operatorStr) throws IllegalIdentifierException {
 			return OperatorAssistant.getOperator(operatorStr);
@@ -55,6 +56,30 @@ abstract class ExpItem {
 			
 			mOperatorStr = operatorStr;
 		}//con_Operator		
+		
+		//通过调用该方法来执行对应运算符的计算，将计算结果封装为一个Operand对象并返回
+		public abstract Operand operate(Operand[] operands) throws OperandNumException;
+		
+		//获取运算符运算时需要的操作数个数
+		public abstract int getDimension();
+		
+		//获取运算符的类型
+		public abstract OperatorType getOperatorType();
+		
+		//通过该方法来判断运算符是否有左侧优先级
+		public abstract boolean isLeftDirPriorExist();
+		
+		//通过该方法来判断运算符是否有右侧优先级
+		public abstract boolean isRightDirPriorExist();
+		
+		//通过该方法判断对于本运算符是否需要进行运算
+		public abstract boolean isNeedOperate();
+		
+		//通过该方法判断对于本运算符是否需要入栈
+		public abstract boolean isNeedPush();		
+		
+		//通过该方法获得本运算符的id
+		public abstract int getId();
 		
 		//获取运算符的左侧优先级，若不存在该侧优先级则抛出异常
 		public int getLeftDirPriority() throws SpecDirPriorNotExistException {
@@ -71,25 +96,6 @@ abstract class ExpItem {
 			return mOperatorStr;
 		}//getOperatorStr
 		
-		//判断运算符是否需要入栈的方法，一般都需要入栈，特殊情况重写该方法即可
-		public boolean needPush() {
-			return true; 
-		}//needPush
-		
-		//返回运算符的标识id，一般情况下都返回-1即可，特殊情况重写以返回指定id
-		public int getId() {
-			return -1;
-		}//getId
-		
-		//通过调用该方法来执行对应运算符的计算，将计算结果封装为一个Operand对象并返回
-		public abstract Operand operate(Operand[] operands) throws OperandNumException;
-		
-		//获取运算符运算时需要的操作数个数
-		public abstract int getDimension();
-		
-		//获取运算符的类型
-		public abstract OperatorType getOperatorType();
-		
 		//检查实际传入的操作数个数和运算符要求的运算符个数是否相等
 		protected void checkOperandNumCorrect(int actualOperandNum) throws OperandNumException {
 			if (actualOperandNum != getDimension()) {
@@ -102,7 +108,7 @@ abstract class ExpItem {
 		 * 该枚举定义了Operator的几种类型
 		 */
 		public static enum OperatorType {
-			LEFT_REQUIRED, RIGHT_REQUIRED, DOUBLE_REQUERED, OPEN, CLOSE;
+			NORMAL, OPEN, CLOSE;
 		}//enum_OperatorType
 		
 		
@@ -142,10 +148,105 @@ abstract class ExpItem {
 		}//class_OperatorAssistant
 		
 		/*
+		 * 普通运算符（所有不具有Open和Close特性的运算符均属于普通运算符）
+		 */
+		private static abstract class NormalOperator extends Operator {
+			private static final OperatorType OPERATOR_TYPE = OperatorType.NORMAL;
+			private static final boolean IS_NEED_PUSH = true;
+			private static final boolean IS_NEED_OPERATE = true;
+			private static final int NORMAL_OPERATOR_ID = -1;
+			
+			
+			public NormalOperator(String operatorStr) {
+				super(operatorStr);
+			}//con_NormalOperator
+			
+			@Override
+			public OperatorType getOperatorType() {
+				return OPERATOR_TYPE;
+			}//getOperatorType
+			
+			@Override
+			public boolean isNeedPush() {
+				return IS_NEED_PUSH;
+			}//isNeedPush
+			
+			@Override
+			public boolean isNeedOperate() {
+				return IS_NEED_OPERATE;
+			}//isNeedOperate
+			
+			@Override
+			public int getId() {
+				return NORMAL_OPERATOR_ID;
+			}//普通运算符不需要判定id，所以普通运算符id置为-1
+		}//class_NormalOperator
+		
+		/*
+		 * OPEN类型运算符的基类
+		 */
+		private static abstract class OpenOperator extends Operator {
+			private static final OperatorType OPERATOR_TYPE = OperatorType.OPEN;
+			private static final boolean IS_NEED_PUSH = true;
+			
+			private int mId;
+			
+			
+			public OpenOperator(String operatorStr, int id) {
+				super(operatorStr);
+				
+				mId = id;
+			}//con_OpenOperator
+			
+			@Override
+			public OperatorType getOperatorType() {
+				return OPERATOR_TYPE;
+			}//getOperatorType
+			
+			@Override
+			public int getId() {
+				return mId;
+			}//getId
+			
+			@Override
+			public boolean isNeedPush() {
+				return IS_NEED_PUSH;
+			}//isNeedPush
+		}//class_OpenOperator
+		
+		/*
+		 * CLOSE类型的运算符的基类
+		 */
+		private static abstract class CloseOperator extends Operator {
+			private static final OperatorType OPERATOR_TYPE = OperatorType.CLOSE;
+			
+			private int mId;
+			
+			
+			public CloseOperator(String operatorStr, int id) {
+				super(operatorStr);
+				
+				mId = id;
+			}//con_CloseOperator
+			
+			@Override
+			public OperatorType getOperatorType() {
+				return OPERATOR_TYPE;
+			}//getOperatorType
+			
+			@Override
+			public int getId() {
+				return mId;
+			}//getId
+		}//class_CloseOperator
+		
+		/*
 		 * 具有双侧优先级的运算符的基类
 		 */
-		private static abstract class DoubleDirOperator extends Operator {
-			private static final OperatorType OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
+		private static abstract class DoubleDirOperator extends NormalOperator {	
+			private static final boolean IS_LEFT_DIR_PRIOR_EXIST = true;
+			private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = true;
+			private static final int DIMENSION = 2;
 			
 			private final int mLeftDirPriority;
 			private final int mRightDirPriority;
@@ -159,6 +260,16 @@ abstract class ExpItem {
 			}//con_DoubleDirOperator
 			
 			@Override
+			public boolean isLeftDirPriorExist() {
+				return IS_LEFT_DIR_PRIOR_EXIST;
+			}//isLeftPriorExist
+			
+			@Override
+			public boolean isRightDirPriorExist() {
+				return IS_RIGHT_DIR_PRIOR_EXIST;
+			}//isRightPriorExist
+			
+			@Override
 			public int getLeftDirPriority() {
 				return mLeftDirPriority;
 			}//getLeftDirPriority
@@ -169,16 +280,18 @@ abstract class ExpItem {
 			}//getRightDirPriority
 			
 			@Override
-			public OperatorType getOperatorType() {
-				return OPERATOR_TYPE;
-			}//getOperatorType
+			public int getDimension() {
+				return DIMENSION;
+			}//getDimension
 		}//class_DoubleDirOperator
 		
 		/*
 		 * 具有左单侧优先级的运算符的基类
 		 */
-		private static abstract class LeftSingleDirOperator extends Operator {
-			private static final OperatorType OPERATOR_TYPE = OperatorType.LEFT_REQUIRED;
+		private static abstract class LeftSingleDirOperator extends NormalOperator {
+			private static final boolean IS_LEFT_DIR_PRIOR_EXIST = true;
+			private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
+			private static final int DIMENSION = 1;
 			
 			private final int mLeftDirPriority;
 			
@@ -190,21 +303,33 @@ abstract class ExpItem {
 			}//con_LeftSingleDirOperator
 			
 			@Override
+			public boolean isLeftDirPriorExist() {
+				return IS_LEFT_DIR_PRIOR_EXIST;
+			}//isLeftPriorExist
+			
+			@Override
+			public boolean isRightDirPriorExist() {
+				return IS_RIGHT_DIR_PRIOR_EXIST;
+			}//isRightPriorExist
+			
+			@Override
 			public int getLeftDirPriority() {
 				return mLeftDirPriority;
 			}//getLeftDirPriority
 			
 			@Override
-			public OperatorType getOperatorType() {
-				return OPERATOR_TYPE;
-			}//getOperatorType
+			public int getDimension() {
+				return DIMENSION;
+			}//getDimension
 		}//class_LeftSingleDirOperator
 		
 		/*
 		 * 具有右单侧优先级的运算符的基类
 		 */
-		private static abstract class RightSingleDirOperator extends Operator {
-			private static final OperatorType OPERATOR_TYPE = OperatorType.RIGHT_REQUIRED;
+		private static abstract class RightSingleDirOperator extends NormalOperator {
+			private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+			private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = true;
+			private static final int DIMENSION = 1;
 			
 			private final int mRightDirPriority;
 			
@@ -216,56 +341,30 @@ abstract class ExpItem {
 			}//con_LeftSingleDirOperator
 			
 			@Override
+			public boolean isLeftDirPriorExist() {
+				return IS_LEFT_DIR_PRIOR_EXIST;
+			}//isLeftPriorExist
+			
+			@Override
+			public boolean isRightDirPriorExist() {
+				return IS_RIGHT_DIR_PRIOR_EXIST;
+			}//isRightPriorExist
+			
+			@Override
 			public int getRightDirPriority() {
 				return mRightDirPriority;
 			}//getLeftDirPriority
 			
 			@Override
-			public OperatorType getOperatorType() {
-				return OPERATOR_TYPE;
-			}//getOperatorType
+			public int getDimension() {
+				return DIMENSION;
+			}//getDimension
 		}//class_LeftSingleDirOperator
-		
-		/*
-		 * OPEN类型运算符的基类
-		 */
-		private static abstract class OpenOperator extends Operator {
-			private static final OperatorType OPERATOR_TYPE = OperatorType.OPEN;
-			
-			public OpenOperator(String operatorStr) {
-				super(operatorStr);
-			}//con_OpenOperator
-			
-			@Override
-			public OperatorType getOperatorType() {
-				return OPERATOR_TYPE;
-			}//getOperatorType
-		}//class_OpenOperator
-
-		/*
-		 * CLOSE类型的运算符的基类
-		 */
-		private static abstract class CloseOperator extends Operator {
-			private static final OperatorType OPERATOR_TYPE = OperatorType.CLOSE;
-			
-			public CloseOperator(String operatorStr) {
-				super(operatorStr);
-			}//con_CloseOperator
-			
-			@Override
-			public OperatorType getOperatorType() {
-				return OPERATOR_TYPE;
-			}//getOperatorType
-		}//class_CloseOperator
 		
 		/*
 		 * 加法运算符对应的类
 		 */
 		private static class Add extends DoubleDirOperator {
-			private static final OperatorType ADD_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
-			private static final int ADD_OPERATOR_DIMENSION = 2;
-			
-			
 			public Add(int leftPriority, int rightPriority, String operatorStr) {
 				super(leftPriority, rightPriority, operatorStr);
 			}//con_Add
@@ -279,26 +378,12 @@ abstract class ExpItem {
 				
 				return new Operand(leftOperand + rightOperand);
 			}//operate
-
-			@Override
-			public int getDimension() {
-				return ADD_OPERATOR_DIMENSION;
-			}//getDimentsion
-
-			@Override
-			public OperatorType getOperatorType() {
-				return ADD_OPERATOR_TYPE;
-			}//getOperatorType
 		}//class_Add
 		
 		/*
 		 * 减法运算符对应的类
 		 */
 		private static class Sub extends DoubleDirOperator {
-			private static final OperatorType SUB_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
-			private static final int SUB_OPERATOR_DIMENSION = 2;
-			
-
 			public Sub(int leftPriority, int rightPriority, String operatorStr) {
 				super(leftPriority, rightPriority, operatorStr);
 			}//con_Sub        
@@ -312,26 +397,12 @@ abstract class ExpItem {
 				
 				return new Operand(leftOperand - rightOperand);
 			}//operate
-
-			@Override
-			public int getDimension() {
-				return SUB_OPERATOR_DIMENSION;
-			}
-
-			@Override
-			public OperatorType getOperatorType() {
-				return SUB_OPERATOR_TYPE;
-			}
 		}//class_Sub
 		
 		/*
 		 * 乘法运算符对应的类
 		 */
 		private static class Mul extends DoubleDirOperator {
-			private static final OperatorType MUL_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
-			private static final int MUL_OPERATOR_DIMENSION = 2;
-			
-			
 			public Mul(int leftPriority, int rightPriority, String operatorStr) {
 				super(leftPriority, rightPriority, operatorStr);
 			}
@@ -345,26 +416,12 @@ abstract class ExpItem {
 				
 				return new Operand(leftOperand * rightOperand);
 			}
-
-			@Override
-			public int getDimension() {
-				return MUL_OPERATOR_DIMENSION;
-			}
-
-			@Override
-			public OperatorType getOperatorType() {
-				return MUL_OPERATOR_TYPE;
-			}
 		}//class_Mul
 		
 		/*
 		 * 除法运算符对应的类
 		 */
 		private static class Div extends DoubleDirOperator {
-			private static final OperatorType DIV_OPERATOR_TYPE = OperatorType.DOUBLE_REQUERED;
-			private static final int DIV_OPERATOR_DIMENSION = 2;
-			
-			
 			public Div(int leftPriority, int rightPriority, String operatorStr) {
 				super(leftPriority, rightPriority, operatorStr);
 			}
@@ -378,26 +435,55 @@ abstract class ExpItem {
 				
 				return new Operand(leftOperand / rightOperand);
 			}
-
-			@Override
-			public int getDimension() {
-				return DIV_OPERATOR_DIMENSION;
-			}
-
-			@Override
-			public OperatorType getOperatorType() {
-				return DIV_OPERATOR_TYPE;
-			}
 		}//class_Div
+		
+		/*
+		 * 取余运算符对应的类
+		 */
+		private static class Mod extends DoubleDirOperator {
+			public Mod(int leftPriority, int rightPriority, String operatorStr) {
+				super(leftPriority, rightPriority, operatorStr);
+			}
+
+			@Override
+			public Operand operate(Operand[] operands) throws OperandNumException {
+				checkOperandNumCorrect(operands.length);
+				
+				double leftOperand = operands[0].getValue();
+				double rightOperand = operands[1].getValue();
+				
+				return new Operand(leftOperand % rightOperand);
+			}
+		}
+		
+		/*
+		 * 次幂运算符对应的类
+		 */
+		private static class Pow extends DoubleDirOperator {
+			public Pow(int leftPriority, int rightPriority, String operatorStr) {
+				super(leftPriority, rightPriority, operatorStr);
+			}
+
+			@Override
+			public Operand operate(Operand[] operands) throws OperandNumException {
+				checkOperandNumCorrect(operands.length);
+				
+				double leftOperand = operands[0].getValue();
+				double rightOperand = operands[1].getValue();
+				
+				return new Operand(Math.pow(leftOperand, rightOperand));
+			}
+		}
 	}//class_Operator
 	
 	/*
 	 * 操作数类
 	 */
 	public static class Operand extends ExpItem {
-		private static final double PRECISION = 10e-15;
+		private static final double PRECISION = 10e-15; //操作数的精度，如果需要更改精度，修改此值即可
 		private static final double AUXILIARY = 1 / PRECISION;
 		
+		//操作数的值
 		private double mValue;
 		
 		
@@ -408,7 +494,7 @@ abstract class ExpItem {
 		}//con_Operand
 		
 		public void setValue(double value) {
-			mValue = value;
+			mValue = precision(value);
 		}//setValue
 		
 		public double getValue() {
