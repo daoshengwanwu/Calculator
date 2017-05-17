@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.daoshengwanwu.math_util.calculator.exception.IllegalIdentifierException;
 import com.daoshengwanwu.math_util.calculator.exception.OperandNumException;
+import com.daoshengwanwu.math_util.calculator.exception.OperandOutOfBoundsException;
+import com.daoshengwanwu.math_util.calculator.exception.ShouldNotOperateException;
 import com.daoshengwanwu.math_util.calculator.exception.SpecDirPriorNotExistException;
 
 
@@ -17,7 +19,7 @@ import com.daoshengwanwu.math_util.calculator.exception.SpecDirPriorNotExistExce
 abstract class ExpItem {
 	//该项的类型，取值分别有：OPERATOR(运算符)、OPERAND(操作数)、VARIABLE(变量)
 	private final ItemType mItemType;
-	
+
 	
 	public ExpItem(ItemType itemType) {
 		mItemType = itemType;
@@ -220,7 +222,6 @@ abstract class ExpItem {
 				}//getId
 			}//class_CloseOperator
 
-			
 			/*
 			 * 具有双侧优先级的运算符的基类
 			 */
@@ -435,7 +436,7 @@ abstract class ExpItem {
 					
 					return new Operand(leftOperand % rightOperand);
 				}
-			}
+			}//class_Mod
 			
 			/*
 			 * 次幂运算符对应的类
@@ -453,6 +454,630 @@ abstract class ExpItem {
 					double rightOperand = operands[1].getValue();
 					
 					return new Operand(Math.pow(leftOperand, rightOperand));
+				}
+			}//class_Pow
+			
+			/*
+			 * 取负运算符
+			 */
+			private static class Negate extends RightSingleDirOperator {
+				public Negate(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					
+					return new Operand(0 - operand);
+				}
+			}//class_Negate
+			
+			/*
+			 * sin运算符
+			 */
+			private static class Sin extends RightSingleDirOperator {
+				public Sin(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					
+					return new Operand(Math.sin(operand));
+				}
+			}//class_Sin
+			
+			/*
+			 * cos运算符
+			 */
+			private static class Cos extends RightSingleDirOperator {
+				public Cos(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					
+					return new Operand(Math.cos(operand));
+				}
+			}//class_Cos
+			
+			/*
+			 * tan运算符
+			 */
+			private static class Tan extends RightSingleDirOperator {
+				public Tan(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					
+					return new Operand(Math.tan(operand));
+				}
+			}//class_Tan
+			
+			/*
+			 * asin运算符
+			 */
+			private static class ASin extends RightSingleDirOperator {
+				public ASin(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					if (Operand.precision(operand) < -1 || Operand.precision(operand) > 1) {
+						throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
+					}//if
+					
+					return new Operand(Math.asin(operand));
+				}
+			}//class_ASin
+			
+			/*
+			 * acos运算符
+			 */
+			private static class ACos extends RightSingleDirOperator {
+				public ACos(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					if (Operand.precision(operand) < -1 || Operand.precision(operand) > 1) {
+						throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
+					}//if
+					
+					return new Operand(Math.acos(operand));
+				}
+			}//class_ACos
+			
+			/*
+			 * atan运算符
+			 */
+			private static class ATan extends RightSingleDirOperator {
+				public ATan(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					if (Operand.precision(operand) < -1 || Operand.precision(operand) > 1) {
+						throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
+					}//if
+					
+					return new Operand(Math.atan(operand));
+				}	
+			}//class_ATan
+			
+			/*
+			 * ln运算符
+			 */
+			private static class Ln extends RightSingleDirOperator {
+				public Ln(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					if (Operand.precision(operand) <= 0) {
+						throw new OperandOutOfBoundsException(getOperatorStr(), "(0, +∞)", operand);
+					}//if
+					
+					return new Operand(Math.log1p(operand - 1)); //Math.log1p(x)返回值为：ln(1 + x);
+				}
+			}//class_Ln
+			
+			/*
+			 * lg运算符
+			 */
+			private static class Lg extends RightSingleDirOperator {
+				public Lg(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					if (Operand.precision(operand) <= 0) {
+						throw new OperandOutOfBoundsException(getOperatorStr(), "(0, +∞)", operand);
+					}//if
+					
+					return new Operand(Math.log10(operand));
+				}
+			}//class_Lg
+			
+			/*
+			 * sqrt运算符
+			 */
+			private static class Sqrt extends RightSingleDirOperator {
+				public Sqrt(int rightDirPriority, String operatorStr) {
+					super(rightDirPriority, operatorStr);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					if (Operand.precision(operand) < 0) {
+						throw new OperandOutOfBoundsException(getOperatorStr(), "[0, +∞)", operand);
+					}//if
+					
+					return new Operand(Math.sqrt(operand));
+				}
+			}//class_Sqrt
+			
+			/*
+			 * fact运算符（阶乘）
+			 */
+			private static class Fact extends LeftSingleDirOperator {
+				public Fact(int leftDirPriority, String operatorStr) {
+					super(leftDirPriority, operatorStr);
+					// TODO Auto-generated constructor stub
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					
+					return new Operand(fact(operand));
+				}//operate
+				
+				private long fact(double operand) {
+					if (Operand.precision(operand) < 0) {
+						throw new OperandOutOfBoundsException(getOperatorStr(), "非负整数", operand);
+					}//if
+					
+					if (!new Operand(operand - (int)operand).equals(new Operand(0))) {
+						throw new OperandOutOfBoundsException(getOperatorStr(), "非负整数", operand);
+					}//if
+					
+					long result = 1;
+					int nOperand = (int)operand;
+					for (int i = 2; i <= nOperand; i++) {
+						result *= i;
+					}//for
+					
+					return result;
+				}//fact
+			}//class_Fact
+			
+			/*
+			 * 左绝对值
+			 */
+			private static class LeftAbs extends OpenOperator {
+				private static final int LOG_START_DIMENSION = 1;
+				private static final boolean IS_NEED_PUSH = false;
+				private static final boolean IS_NEED_OPERATE = true;
+				private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+				private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
+				
+				
+				public LeftAbs(String operatorStr, int id) {
+					super(operatorStr, id);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double operand = operands[0].getValue();
+					
+					return new Operand(Math.abs(operand));
+				}
+
+				@Override
+				public int getDimension() {
+					return LOG_START_DIMENSION;
+				}
+
+				@Override
+				public boolean isLeftDirPriorExist() {
+					return IS_LEFT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isRightDirPriorExist() {
+					return IS_RIGHT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isNeedOperate() {
+					return IS_NEED_OPERATE;
+				}
+
+				@Override
+				public boolean isNeedPush() {
+					return IS_NEED_PUSH;
+				}		
+			}//LeftAbs
+			
+			/*
+			 * 左括号
+			 */
+			private static class LeftBrackets extends OpenOperator {
+				private static final int LEFT_BRACKETS_DIMENSION = -1;
+				private static final boolean IS_NEED_PUSH = false;
+				private static final boolean IS_NEED_OPERATE = false;
+				private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+				private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
+				
+				
+				public LeftBrackets(String operatorStr, int id) {
+					super(operatorStr, id);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					throw new ShouldNotOperateException(getOperatorStr());
+				}
+
+				@Override
+				public int getDimension() {
+					return LEFT_BRACKETS_DIMENSION;
+				}
+
+				@Override
+				public boolean isLeftDirPriorExist() {
+					return IS_LEFT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isRightDirPriorExist() {
+					return IS_RIGHT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isNeedOperate() {
+					return IS_NEED_OPERATE;
+				}
+
+				@Override
+				public boolean isNeedPush() {
+					return IS_NEED_PUSH;
+				}		
+			}//LeftBrackets
+			
+			/*
+			 * log开始运算符（log）
+			 */
+			private static class LogStart extends OpenOperator {
+				private static final int LOG_START_DIMENSION = -1;
+				private static final boolean IS_NEED_PUSH = false;
+				private static final boolean IS_NEED_OPERATE = false;
+				private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+				private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
+				
+				
+				public LogStart(String operatorStr, int id) {
+					super(operatorStr, id);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					throw new ShouldNotOperateException(getOperatorStr());
+				}
+
+				@Override
+				public int getDimension() {
+					return LOG_START_DIMENSION;
+				}
+
+				@Override
+				public boolean isLeftDirPriorExist() {
+					return IS_LEFT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isRightDirPriorExist() {
+					return IS_RIGHT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isNeedOperate() {
+					return IS_NEED_OPERATE;
+				}
+
+				@Override
+				public boolean isNeedPush() {
+					return IS_NEED_PUSH;
+				}				
+			}//LogStart
+			
+			/*
+			 * 表达式开始标记
+			 */
+			private static class StartFlag extends OpenOperator {
+				private static final int FLAG_END_DIMENSION = -1;
+				private static final boolean IS_NEED_PUSH = false;
+				private static final boolean IS_NEED_OPERATE = false;
+				private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+				private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
+				
+				
+				public StartFlag(String operatorStr, int id) {
+					super(operatorStr, id);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					throw new ShouldNotOperateException(getOperatorStr());
+				}
+
+				@Override
+				public int getDimension() {
+					return FLAG_END_DIMENSION;
+				}
+
+				@Override
+				public boolean isLeftDirPriorExist() {
+					return IS_LEFT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isRightDirPriorExist() {
+					return IS_RIGHT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isNeedOperate() {
+					return IS_NEED_OPERATE;
+				}
+
+				@Override
+				public boolean isNeedPush() {
+					return IS_NEED_PUSH;
+				}
+			}
+			
+			/*
+			 * 右绝对值
+			 */
+			private static class RightAbs extends CloseOperator {
+				private static final int RIGHT_ABS_DIMENSION = -1;
+				private static final boolean IS_NEED_PUSH = false;
+				private static final boolean IS_NEED_OPERATE = false;
+				private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+				private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
+				
+				
+				public RightAbs(String operatorStr, int id) {
+					super(operatorStr, id);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					throw new ShouldNotOperateException(getOperatorStr());
+				}
+
+				@Override
+				public int getDimension() {
+					return RIGHT_ABS_DIMENSION;
+				}
+
+				@Override
+				public boolean isLeftDirPriorExist() {
+					return IS_LEFT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isRightDirPriorExist() {
+					return IS_RIGHT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isNeedOperate() {
+					return IS_NEED_OPERATE;
+				}
+
+				@Override
+				public boolean isNeedPush() {
+					return IS_NEED_PUSH;
+				}
+			}//RightAbs
+			
+			/*
+			 * 右括号
+			 */
+			private static class RightBrackets extends CloseOperator {
+				private static final int RIGHT_BRACKETS_DIMENSION = -1;
+				private static final boolean IS_NEED_PUSH = false;
+				private static final boolean IS_NEED_OPERATE = false;
+				private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+				private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
+				
+				
+				public RightBrackets(String operatorStr, int id) {
+					super(operatorStr, id);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					throw new ShouldNotOperateException(getOperatorStr());
+				}
+
+				@Override
+				public int getDimension() {
+					return RIGHT_BRACKETS_DIMENSION;
+				}
+
+				@Override
+				public boolean isLeftDirPriorExist() {
+					return IS_LEFT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isRightDirPriorExist() {
+					return IS_RIGHT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isNeedOperate() {
+					return IS_NEED_OPERATE;
+				}
+
+				@Override
+				public boolean isNeedPush() {
+					return IS_NEED_PUSH;
+				}
+			}//RightBrackets
+			
+			/*
+			 * log运算符结束运算符（~）
+			 */
+			private static class LogEnd extends CloseOperator {
+				private static final int LOG_END_DIMENSION = 2;
+				private static final boolean IS_NEED_PUSH = true;
+				private static final boolean IS_NEED_OPERATE = true;
+				private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+				private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = true;
+				
+				private final int mRightPrior;
+				
+				
+				public LogEnd(int rightPrior, String operatorStr, int id) {
+					super(operatorStr, id);
+					
+					mRightPrior = rightPrior;
+				}//con_LogEnd
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					checkOperandNumCorrect(operands.length);
+					
+					double leftOperand = operands[0].getValue();
+					double rightOperand =  operands[1].getValue();
+					
+					if (Operand.precision(leftOperand) <= 0 || new Operand(leftOperand).equals(new Operand(1))) {
+						throw new OperandOutOfBoundsException(getOperatorStr(), "底数应该大于0并且不等于1", leftOperand);
+					}//if
+					
+					if (Operand.precision(rightOperand) <= 0) {
+						throw new OperandOutOfBoundsException(getOperatorStr(), "logx~y: 中的y的取值应该大于0", rightOperand);
+					}//if
+					
+					return new Operand(Math.log(rightOperand) / Math.log(leftOperand));
+				}
+
+				@Override
+				public int getDimension() {
+					return LOG_END_DIMENSION;
+				}
+
+				@Override
+				public boolean isLeftDirPriorExist() {
+					return IS_LEFT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isRightDirPriorExist() {
+					return IS_RIGHT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isNeedOperate() {
+					return IS_NEED_OPERATE;
+				}
+
+				@Override
+				public boolean isNeedPush() {
+					return IS_NEED_PUSH;
+				}
+			}//LogEnd
+		
+			/*
+			 * 表达式结束标记
+			 */
+			private static class EndFlag extends CloseOperator {
+				private static final int FLAG_END_DIMENSION = -1;
+				private static final boolean IS_NEED_PUSH = false;
+				private static final boolean IS_NEED_OPERATE = false;
+				private static final boolean IS_LEFT_DIR_PRIOR_EXIST = false;
+				private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
+				
+				
+				public EndFlag(String operatorStr, int id) {
+					super(operatorStr, id);
+				}
+
+				@Override
+				public Operand operate(Operand[] operands) throws OperandNumException {
+					throw new ShouldNotOperateException(getOperatorStr());
+				}
+
+				@Override
+				public int getDimension() {
+					return FLAG_END_DIMENSION;
+				}
+
+				@Override
+				public boolean isLeftDirPriorExist() {
+					return IS_LEFT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isRightDirPriorExist() {
+					return IS_RIGHT_DIR_PRIOR_EXIST;
+				}
+
+				@Override
+				public boolean isNeedOperate() {
+					return IS_NEED_OPERATE;
+				}
+
+				@Override
+				public boolean isNeedPush() {
+					return IS_NEED_PUSH;
 				}
 			}
 		}//class_CertainOperator
@@ -526,8 +1151,13 @@ abstract class ExpItem {
 		 * 可以根据运算符的字符串描述返回对应的Operator对象, 并且这个Operator在应用的整个运行过程中，只会存在一个实例
 		 */
 		public static class OperatorAssistant {
-			//定义运算符的标识描述
+			//定义成对存在的运算符的id
+			private static final int ABS_ID = 0;
+			private static final int FLAG_ID = 1;
+			private static final int BRACKETS_ID = 2;
+			private static final int LOG_ID = 3;
 			
+			//定义运算符的标识描述			
 			//==================类型确定运算符=========================
 			//==================Normal运算符=========================
 			//====================双目运算符==========================
@@ -596,7 +1226,6 @@ abstract class ExpItem {
 				sStrFlagMap.put("lg", LG);
 				sStrFlagMap.put("ln", LN);
 				sStrFlagMap.put("sqrt", SQRT);
-				sStrFlagMap.put("negate", NEGATE);
 				sStrFlagMap.put("!", FACT);
 			}//static
 			
@@ -606,6 +1235,14 @@ abstract class ExpItem {
 				
 				//--------------在这个switch里添加运算符的字符串描述与实际运算符类的对应--------------------
 				switch (operatorFlag) {
+				case START_FLAG: operator = new CertainOperator.StartFlag("start_flag", FLAG_ID);
+				case END_FLAG: operator = new CertainOperator.EndFlag("end_flag", FLAG_ID);
+				case LEFT_BRACKETS: operator = new CertainOperator.LeftBrackets("(", BRACKETS_ID);
+				case RIGHT_BRACKETS: operator = new CertainOperator.RightBrackets(")", BRACKETS_ID);
+				case LEFT_ABS: operator = new CertainOperator.LeftAbs("|", ABS_ID);
+				case RIGHT_ABS: operator = new CertainOperator.RightAbs("|", ABS_ID);
+				case LOG_START: operator = new CertainOperator.LogStart("log", LOG_ID);
+				case LOG_END: operator = new CertainOperator.LogEnd(00000000, "~", LOG_ID);
 				case ADD: operator = new CertainOperator.Add(1, 1, "+"); break;
 				case SUB: operator = new CertainOperator.Sub(1, 1, "-"); break;
 				case MUL: operator = new CertainOperator.Mul(2, 2, "*"); break;
@@ -650,6 +1287,11 @@ abstract class ExpItem {
 		private double mValue;
 		
 		
+		//将value置为PRECISION指定的精度
+		public static double precision(double value) {
+			return Math.round(value * AUXILIARY) / AUXILIARY;
+		}//precision
+		
 		public Operand(double value) {
 			super(ItemType.OPERAND);
 			
@@ -678,11 +1320,6 @@ abstract class ExpItem {
 		public String toString() {
 			return String.valueOf(mValue);
 		}//toString
-		
-		//将value置为PRECISION指定的精度
-		private double precision(double value) {
-			return Math.round(value * AUXILIARY) / AUXILIARY;
-		}//precision
 	}//class_Operand
 	
 	/*
