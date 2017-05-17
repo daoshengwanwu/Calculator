@@ -539,17 +539,36 @@ abstract class ExpItem {
 			private static final int POW = 5;
 			
 			//===================单目运算符===========================
+			//==================右单目运算符===========================
 			private static final int NEGATE = 128;
+			private static final int SIN = 129;
+			private static final int COS = 130;
+			private static final int TAN = 131;
+			private static final int ASIN = 132;
+			private static final int ACOS = 133;
+			private static final int ATAN = 134;
+			private static final int LN = 135;
+			private static final int LG = 136;
+			private static final int SQRT = 137;
+			
+			//====================左单目运算符=========================
+			private static final int FACT = 256;
 			
 			//====================Open运算符=========================
-			private static final int LEFT_ABS = 256;
+			private static final int LEFT_ABS = 384;
+			private static final int LEFT_BRACKETS = 385;
+			private static final int START_FLAG = 386;
+			private static final int LOG_START = 387;
 			
 			//===================Close运算符=========================
-			private static final int RIGHT_ABS = 384;
+			private static final int RIGHT_ABS = 512;
+			private static final int RIGHT_BRACKETS = 513;
+			private static final int END_FLAG = 514;
+			private static final int LOG_END = 515;
 			
 			//==================类型未确定运算符========================
-			private static final int HYPHEN_UNCERTAIN = 1024;
-			private static final int VERTICAL_LINE_UNCERTAIN = 1025;
+			private static final int HYPHEN_UNCERTAIN = 640;
+			private static final int VERTICAL_LINE_UNCERTAIN = 641;
 			
 			private static Map<String, Integer> sStrFlagMap = new HashMap<>();
 			private static Map<Integer, Operator> sFlagOperatorMap = new HashMap<>();
@@ -564,6 +583,21 @@ abstract class ExpItem {
 				sStrFlagMap.put("%", MOD);
 				sStrFlagMap.put("^", POW);
 				sStrFlagMap.put("|", VERTICAL_LINE_UNCERTAIN); //'|'可能表示做绝对值负号，也可能表示又绝对值负号
+				sStrFlagMap.put("(", LEFT_BRACKETS);
+				sStrFlagMap.put(")", RIGHT_BRACKETS);
+				sStrFlagMap.put("sin", SIN);
+				sStrFlagMap.put("cos", COS);
+				sStrFlagMap.put("tan", TAN);
+				sStrFlagMap.put("asin", ASIN);
+				sStrFlagMap.put("acos", ACOS);
+				sStrFlagMap.put("atan", ATAN);
+				sStrFlagMap.put("log", LOG_START);
+				sStrFlagMap.put("~", LOG_END);
+				sStrFlagMap.put("lg", LG);
+				sStrFlagMap.put("ln", LN);
+				sStrFlagMap.put("sqrt", SQRT);
+				sStrFlagMap.put("negate", NEGATE);
+				sStrFlagMap.put("!", FACT);
 			}//static
 			
 			
