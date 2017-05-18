@@ -1279,17 +1279,17 @@ abstract class ExpItem {
 	/*
 	 * 操作数类
 	 */
-	public static class Operand extends ExpItem {
-		private static final double PRECISION = 10e-15; //操作数的精度，如果需要更改精度，修改此值即可
-		private static final double AUXILIARY = 1 / PRECISION;
+	public static class Operand extends ExpItem {	
+		//操作数的判等精度，也就是该精度在需要判断相等（或不等）时使用
+		private static final int SIGNIFICANCE_DIGIT_NUM = 15;
 		
 		//操作数的值
 		private double mValue;
 		
 		
-		//将value置为PRECISION指定的精度
+		//消除value的无效位
 		public static double precision(double value) {
-			return Math.round(value * AUXILIARY) / AUXILIARY;
+			return Double.parseDouble(String.valueOf(value).substring(0, SIGNIFICANCE_DIGIT_NUM));
 		}//precision
 		
 		public Operand(double value) {
@@ -1306,14 +1306,48 @@ abstract class ExpItem {
 			return mValue;
 		}//getValue
 		
+		public boolean greaterThan(Object obj) {
+			double argValue = 0.0;
+			
+			if (obj instanceof Double) {
+				argValue = precision(((Double)obj).doubleValue());
+			} else if (obj instanceof Operand) {
+				argValue = precision(((Operand)obj).getValue());
+			} else {
+				return false;
+			}
+			
+			return getValue() > argValue;
+		}
+		
+		public boolean lessThan(Object obj) {
+			double argValue = 0.0;
+			
+			if (obj instanceof Double) {
+				argValue = precision(((Double)obj).doubleValue());
+			} else if (obj instanceof Operand) {
+				argValue = precision(((Operand)obj).getValue());
+			} else {
+				return false;
+			}
+			
+			return getValue() < argValue;
+		}
+		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof Operand)) {
-				return false;
-			}//if
+			double argValue = 0.0;
 			
-			Operand operand = (Operand)obj;
-			return Math.abs(Math.abs(mValue) - Math.abs(operand.getValue())) < PRECISION;
+			if (obj instanceof Double) {
+				argValue = precision(((Double)obj).doubleValue());
+			} else if (obj instanceof Operand) {
+				argValue = precision(((Operand)obj).getValue());
+			} else {
+				return false;
+			}
+			
+			//这里可以直接使用==判等，因为前边在设置mValue的时候，对mValue进行了有效数位处理
+			return getValue() == argValue;
 		}//equals
 		
 		@Override
