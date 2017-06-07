@@ -9,6 +9,8 @@ import com.daoshengwanwu.math_util.calculator.exception.OperandNumException;
 import com.daoshengwanwu.math_util.calculator.exception.OperandOutOfBoundsException;
 import com.daoshengwanwu.math_util.calculator.exception.ShouldNotOperateException;
 import com.daoshengwanwu.math_util.calculator.exception.SpecDirPriorNotExistException;
+import com.daoshengwanwu.math_util.calculator.exception.VariableDomainErrorException;
+import com.daoshengwanwu.math_util.calculator.util.DigitUtil;
 
 
 /*
@@ -542,7 +544,7 @@ abstract class ExpItem {
 					checkOperandNumCorrect(operands.length);
 					
 					double operand = operands[0].getValue();
-					if (Operand.precision(operand) < -1 || Operand.precision(operand) > 1) {
+					if (operand < -1 || operand > 1) {
 						throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
 					}//if
 					
@@ -563,7 +565,7 @@ abstract class ExpItem {
 					checkOperandNumCorrect(operands.length);
 					
 					double operand = operands[0].getValue();
-					if (Operand.precision(operand) < -1 || Operand.precision(operand) > 1) {
+					if (operand < -1 || operand > 1) {
 						throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
 					}//if
 					
@@ -584,7 +586,7 @@ abstract class ExpItem {
 					checkOperandNumCorrect(operands.length);
 					
 					double operand = operands[0].getValue();
-					if (Operand.precision(operand) < -1 || Operand.precision(operand) > 1) {
+					if (operand < -1 || operand > 1) {
 						throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
 					}//if
 					
@@ -605,7 +607,7 @@ abstract class ExpItem {
 					checkOperandNumCorrect(operands.length);
 					
 					double operand = operands[0].getValue();
-					if (Operand.precision(operand) <= 0) {
+					if (operand <= 0) {
 						throw new OperandOutOfBoundsException(getOperatorStr(), "(0, +∞)", operand);
 					}//if
 					
@@ -626,7 +628,7 @@ abstract class ExpItem {
 					checkOperandNumCorrect(operands.length);
 					
 					double operand = operands[0].getValue();
-					if (Operand.precision(operand) <= 0) {
+					if (operand <= 0) {
 						throw new OperandOutOfBoundsException(getOperatorStr(), "(0, +∞)", operand);
 					}//if
 					
@@ -647,7 +649,7 @@ abstract class ExpItem {
 					checkOperandNumCorrect(operands.length);
 					
 					double operand = operands[0].getValue();
-					if (Operand.precision(operand) < 0) {
+					if (operand < 0) {
 						throw new OperandOutOfBoundsException(getOperatorStr(), "[0, +∞)", operand);
 					}//if
 					
@@ -674,7 +676,7 @@ abstract class ExpItem {
 				}//operate
 				
 				private long fact(double operand) {
-					if (Operand.precision(operand) < 0) {
+					if (operand < 0) {
 						throw new OperandOutOfBoundsException(getOperatorStr(), "非负整数", operand);
 					}//if
 					
@@ -998,11 +1000,11 @@ abstract class ExpItem {
 					double leftOperand = operands[0].getValue();
 					double rightOperand =  operands[1].getValue();
 					
-					if (Operand.precision(leftOperand) <= 0 || new Operand(leftOperand).equals(new Operand(1))) {
+					if (leftOperand <= 0 || leftOperand == 1) {
 						throw new OperandOutOfBoundsException(getOperatorStr(), "底数应该大于0并且不等于1", leftOperand);
 					}//if
 					
-					if (Operand.precision(rightOperand) <= 0) {
+					if (rightOperand <= 0) {
 						throw new OperandOutOfBoundsException(getOperatorStr(), "logx~y: 中的y的取值应该大于0", rightOperand);
 					}//if
 					
@@ -1032,6 +1034,11 @@ abstract class ExpItem {
 				@Override
 				public boolean isNeedPush() {
 					return IS_NEED_PUSH;
+				}
+				
+				@Override
+				public int getRightDirPriority() {
+					return mRightPrior;
 				}
 			}//LogEnd
 		
@@ -1280,86 +1287,26 @@ abstract class ExpItem {
 	 * 操作数类
 	 */
 	public static class Operand extends ExpItem {	
-		//操作数的判等精度，也就是该精度在需要判断相等（或不等）时使用
-		private static final int SIGNIFICANCE_DIGIT_NUM = 15;
+		//操作数的有效位数
+		private static final int SIGNIFICANCE_DIGIT = 15;
 		
 		//操作数的值
 		private double mValue;
 		
 		
-		//消除value的无效位
-		public static double precision(double value) {
-			return Double.parseDouble(String.valueOf(value).substring(0, SIGNIFICANCE_DIGIT_NUM));
-		}//precision
-		
 		public Operand(double value) {
 			super(ItemType.OPERAND);
 			
-			mValue = precision(value);
+			mValue = DigitUtil.reserveSignificantDigits(value, SIGNIFICANCE_DIGIT);
 		}//con_Operand
 		
 		public void setValue(double value) {
-			mValue = precision(value);
+			mValue = DigitUtil.reserveSignificantDigits(value, SIGNIFICANCE_DIGIT);
 		}//setValue
 		
 		public double getValue() {
 			return mValue;
 		}//getValue
-		
-//		public double getMinInfluentialUnit() {
-//			if (Math.abs(getValue()) < 1.0) {
-//				
-//			} else {
-//				int integerBitsNum = String.valueOf((long)getValue()).length();
-//				int allowFloatBitsNum = SIGNIFICANCE_DIGIT_NUM - integerBitsNum;
-//			
-//				return Math.pow(10, 0 - allowFloatBitsNum);
-//			}//if-else
-//		}//getMinInfluentialUnit
-		
-		public boolean greaterThan(Object obj) {
-			double argValue = 0.0;
-			
-			if (obj instanceof Double) {
-				argValue = precision(((Double)obj).doubleValue());
-			} else if (obj instanceof Operand) {
-				argValue = precision(((Operand)obj).getValue());
-			} else {
-				return false;
-			}
-			
-			return getValue() > argValue;
-		}
-		
-		public boolean lessThan(Object obj) {
-			double argValue = 0.0;
-			
-			if (obj instanceof Double) {
-				argValue = precision(((Double)obj).doubleValue());
-			} else if (obj instanceof Operand) {
-				argValue = precision(((Operand)obj).getValue());
-			} else {
-				return false;
-			}
-			
-			return getValue() < argValue;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			double argValue = 0.0;
-			
-			if (obj instanceof Double) {
-				argValue = precision(((Double)obj).doubleValue());
-			} else if (obj instanceof Operand) {
-				argValue = precision(((Operand)obj).getValue());
-			} else {
-				return false;
-			}
-			
-			//这里可以直接使用==判等，因为前边在设置mValue的时候，对mValue进行了有效数位处理
-			return getValue() == argValue;
-		}//equals
 		
 		@Override
 		public String toString() {
@@ -1371,8 +1318,17 @@ abstract class ExpItem {
 	 * 变量类
 	 */
 	public static class Variable extends ExpItem {
-		public Variable() {
+		private String mFlagStr;
+		private Operand mUpperLimit;
+		private Operand mLowerLimit;
+		private Operand mSpan;
+		
+		public Variable(String flagStr, Operand upperLimit, Operand lowerLimit, Operand span) {
 			super(ItemType.VARIABLE);
+			
+			if (lowerLimit.getValue() > upperLimit.getValue()) {
+				throw new VariableDomainErrorException();
+			}
 		}//con_Variable
 	}//class_Variable
 }//class_ExpItem
