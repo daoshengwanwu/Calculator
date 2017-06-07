@@ -1306,6 +1306,17 @@ abstract class ExpItem {
 			return mValue;
 		}//getValue
 		
+//		public double getMinInfluentialUnit() {
+//			if (Math.abs(getValue()) < 1.0) {
+//				
+//			} else {
+//				int integerBitsNum = String.valueOf((long)getValue()).length();
+//				int allowFloatBitsNum = SIGNIFICANCE_DIGIT_NUM - integerBitsNum;
+//			
+//				return Math.pow(10, 0 - allowFloatBitsNum);
+//			}//if-else
+//		}//getMinInfluentialUnit
+		
 		public boolean greaterThan(Object obj) {
 			double argValue = 0.0;
 			
