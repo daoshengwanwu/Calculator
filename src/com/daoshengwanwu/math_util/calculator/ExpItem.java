@@ -3,13 +3,17 @@ package com.daoshengwanwu.math_util.calculator;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.daoshengwanwu.math_util.calculator.exception.IllegalIdentifierException;
+import com.daoshengwanwu.math_util.calculator.exception.NoNextValueException;
 import com.daoshengwanwu.math_util.calculator.exception.OperandNumException;
 import com.daoshengwanwu.math_util.calculator.exception.OperandOutOfBoundsException;
 import com.daoshengwanwu.math_util.calculator.exception.ShouldNotOperateException;
 import com.daoshengwanwu.math_util.calculator.exception.SpecDirPriorNotExistException;
+import com.daoshengwanwu.math_util.calculator.exception.VarIdentifierAlreadyExistException;
 import com.daoshengwanwu.math_util.calculator.exception.VariableDomainErrorException;
+import com.daoshengwanwu.math_util.calculator.exception.VariableSpanNotSuitableException;
 import com.daoshengwanwu.math_util.calculator.util.DigitUtil;
 
 
@@ -1280,6 +1284,10 @@ abstract class ExpItem {
 
 				return operator;
 			}//getOperator
+			
+			public static Set<String> getOperatorIdentifiers() {
+				return sStrFlagMap.keySet();
+			}//getOperatorIdentifiers
 		}//class_OperatorAssistant
 	}//class_Operator
 	
@@ -1318,17 +1326,83 @@ abstract class ExpItem {
 	 * 变量类
 	 */
 	public static class Variable extends ExpItem {
-		private String mFlagStr;
-		private Operand mUpperLimit;
-		private Operand mLowerLimit;
-		private Operand mSpan;
+		private String mFlagStr; //变量的字符串标识，只能是
+		private double mUpperLimit;
+		private double mLowerLimit;
+		private double mSpan;
+		private double mCurValue;
+		private VariableAssistant mVariableAssistant;
 		
-		public Variable(String flagStr, Operand upperLimit, Operand lowerLimit, Operand span) {
+		
+		public static boolean isIdentifierAlreadyExistInOperator(String identifierStr) {			
+			return Operator.OperatorAssistant.getOperatorIdentifiers().contains(identifierStr);
+		}
+		
+		//私有构造函数防止直接实例化
+		private Variable(String flagStr, Operand lowerLimit, boolean isLowerOpen
+				, Operand upperLimit, boolean isUpperOpen, Operand span, VariableAssistant variableAssistant) {
 			super(ItemType.VARIABLE);
 			
+			//变量的字符串标识
+			mFlagStr = flagStr;
+			
+			//判断变量的上下限是否合法
 			if (lowerLimit.getValue() > upperLimit.getValue()) {
 				throw new VariableDomainErrorException();
 			}
+			
+			//变量的最小跨度，以上限为标准
+			Operand minimuxSpan = new Operand(DigitUtil.getMinimumSpan(upperLimit.getValue(), Operand.SIGNIFICANCE_DIGIT));
+			if (span.getValue() < minimuxSpan.getValue()) {
+				span = minimuxSpan;
+			}
+			//变量的跨度
+			mSpan = span.getValue();
+
+			if (isLowerOpen) {
+				lowerLimit = new Operand(lowerLimit.getValue() + mSpan);
+			} 
+			if (isUpperOpen) {
+				upperLimit = new Operand(upperLimit.getValue() - mSpan);
+			}
+			
+			if (lowerLimit.getValue() > upperLimit.getValue()) {
+				throw new VariableSpanNotSuitableException();
+			}
+			
+			mUpperLimit = upperLimit.getValue();
+			mLowerLimit = lowerLimit.getValue();
+			
+			mCurValue = mLowerLimit;
+
+			mVariableAssistant = variableAssistant;
 		}//con_Variable
+		
+		public boolean hasNext() {
+			if (mCurValue <= mUpperLimit) {
+				return true;
+			}
+			
+			return false;
+		}//hasNext
+		
+		public double nextValue() {
+			if (mCurValue <= mUpperLimit) {
+				mCurValue += mSpan;
+				return mCurValue;
+			}
+			
+			throw new NoNextValueException(mFlagStr);
+		}//nextValue
+		
+		@Override
+		public String toString() {
+			return mFlagStr;
+		}//toString
+		
+		
+		public class VariableAssistant {
+			
+		}
 	}//class_Variable
 }//class_ExpItem
