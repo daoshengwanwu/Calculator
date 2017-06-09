@@ -25,7 +25,7 @@ import com.daoshengwanwu.math_util.calculator.util.DigitUtil;
 abstract class ExpItem {
 	//该项的类型，取值分别有：OPERATOR(运算符)、OPERAND(操作数)、VARIABLE(变量)
 	private final ItemType mItemType;
-
+	
 	
 	public ExpItem(ItemType itemType) {
 		mItemType = itemType;
@@ -1288,6 +1288,10 @@ abstract class ExpItem {
 			public static Set<String> getOperatorIdentifiers() {
 				return sStrFlagMap.keySet();
 			}//getOperatorIdentifiers
+			
+			public static boolean isIdentifierAlreadyExist(String identifierStr) {
+				return sStrFlagMap.containsKey(identifierStr);
+			}//isIdentifierAlreadyExist
 		}//class_OperatorAssistant
 	}//class_Operator
 	
@@ -1331,7 +1335,6 @@ abstract class ExpItem {
 		private double mLowerLimit;
 		private double mSpan;
 		private double mCurValue;
-		private VariableAssistant mVariableAssistant;
 		
 		
 		public static boolean isIdentifierAlreadyExistInOperator(String identifierStr) {			
@@ -1340,7 +1343,7 @@ abstract class ExpItem {
 		
 		//私有构造函数防止直接实例化
 		private Variable(String flagStr, Operand lowerLimit, boolean isLowerOpen
-				, Operand upperLimit, boolean isUpperOpen, Operand span, VariableAssistant variableAssistant) {
+				, Operand upperLimit, boolean isUpperOpen, Operand span) {
 			super(ItemType.VARIABLE);
 			
 			//变量的字符串标识
@@ -1374,8 +1377,6 @@ abstract class ExpItem {
 			mLowerLimit = lowerLimit.getValue();
 			
 			mCurValue = mLowerLimit;
-
-			mVariableAssistant = variableAssistant;
 		}//con_Variable
 		
 		public boolean hasNext() {
@@ -1402,7 +1403,26 @@ abstract class ExpItem {
 		
 		
 		public class VariableAssistant {
+			private Map<String, Variable> mVariablesMap = new HashMap<>();
 			
-		}
+			
+			public void addVariable(String flagStr, Operand lowerLimit, boolean isLowerOpen
+				, Operand upperLimit, boolean isUpperOpen, Operand span, VariableAssistant variableAssistant) {
+				if (mVariablesMap.containsKey(flagStr)
+						|| Operator.OperatorAssistant.isIdentifierAlreadyExist(flagStr)) {
+					throw new VarIdentifierAlreadyExistException();
+				}//if
+				
+				mVariablesMap.put(flagStr, new Variable(
+						flagStr,
+						lowerLimit, isLowerOpen,
+						upperLimit, isUpperOpen,
+						span));
+			}//addVariable
+			
+			public void removeVariable(String flagStr) {
+				mVariablesMap.remove(flagStr);
+			}//removeVariable
+		}//class_VariableAssistant
 	}//class_Variable
 }//class_ExpItem

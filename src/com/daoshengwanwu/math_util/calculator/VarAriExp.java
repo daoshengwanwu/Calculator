@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class VarAriExp {
 	public static void main(String[] args) {		
-		String expStr = "sin(pi/2+0*log(e)~2)";
+		String expStr = "|sin(pi/2+0*log(e)~2)|";
 		List<String> keywords = pickKeywords(expStr);
 		System.out.println(keywords);
 	}
@@ -28,7 +28,8 @@ public class VarAriExp {
 
 		char curChar;
 		int curIndex;
-		int itemStartIndex = -1;			
+		int itemStartIndex = -1;	
+		String itemStr = null;
 		boolean isOperatorOpen = false;
 		boolean isOperandOpen = false;
 		boolean isIdentifierOpen = false;
