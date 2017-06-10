@@ -27,8 +27,7 @@ public class VarAriExp {
 	
 	
 	public static void main(String[] args) {
-		String expStr = "|-|-||1.83687546e6*10+(-pi)+|";
-		
+		String expStr = "-1234567 \n	890123454e-10-10-pi*e";
 		long startTime = System.currentTimeMillis();
 		VarAriExp exp = new VarAriExp(expStr, null);
 		long endTime = System.currentTimeMillis();
@@ -61,7 +60,7 @@ public class VarAriExp {
 		for (curIndex = 0; curIndex < expStr.length(); curIndex++) {
 			curChar = expStr.charAt(curIndex);
 			
-			if (curChar == ' ') {				
+			if (curChar == ' ' || curChar == '	' || curChar == '\n') {				
 				if (isOperandOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
 					mExpItems.add(Operand.getOperand(itemStr));
@@ -112,8 +111,10 @@ public class VarAriExp {
 					itemStartIndex = curIndex;
 				}//if
 				
-			} else if ((curChar < 'a' || curChar > 'z')
-					&& (curChar <'A' || curChar > 'Z') && curChar != '_') {				
+			} else if ((curChar < 'a' || curChar > 'z')  
+					&& (curChar <'A' || curChar > 'Z') 
+					&& curChar != '_'
+					&& (curChar != '-' || !isOperandOpen || expStr.charAt(curIndex - 1) != 'e')) {				
 				//curChar是特殊字符
 				if (isOperandOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
@@ -156,8 +157,11 @@ public class VarAriExp {
 					itemStartIndex = curIndex;
 				}//if-else
 				
-			} else if (curChar != 'e' || !isOperandOpen) {
-				//curChar是字母字符
+			} else if ((curChar >= 'a' && curChar <= 'z' 
+					|| curChar >= 'A' && curChar <= 'Z') 
+					&& (curChar != 'e' || !isOperandOpen)
+					|| curChar == '_') {			
+				//curChar是标识符组成字符
 				if (isOperandOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
 					mExpItems.add(Operand.getOperand(itemStr));
