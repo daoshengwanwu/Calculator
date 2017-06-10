@@ -687,7 +687,6 @@ abstract class ExpItem {
 			private static class Fact extends LeftSingleDirOperator {
 				public Fact(int leftDirPriority, String operatorStr) {
 					super(leftDirPriority, operatorStr);
-					// TODO Auto-generated constructor stub
 				}
 
 				@Override
@@ -1266,22 +1265,33 @@ abstract class ExpItem {
 				
 				//--------------在这个switch里添加运算符的字符串描述与实际运算符类的对应--------------------
 				switch (operatorFlag) {
-				case START_FLAG: operator = new CertainOperator.StartFlag("start_flag", FLAG_ID);
-				case END_FLAG: operator = new CertainOperator.EndFlag("end_flag", FLAG_ID);
-				case LEFT_BRACKETS: operator = new CertainOperator.LeftBrackets("(", BRACKETS_ID);
-				case RIGHT_BRACKETS: operator = new CertainOperator.RightBrackets(")", BRACKETS_ID);
-				case LEFT_ABS: operator = new CertainOperator.LeftAbs("|", ABS_ID);
-				case RIGHT_ABS: operator = new CertainOperator.RightAbs("|", ABS_ID);
-				case LOG_START: operator = new CertainOperator.LogStart("log", LOG_ID);
-				case LOG_END: operator = new CertainOperator.LogEnd(00000000, "~", LOG_ID);
-				case ADD: operator = new CertainOperator.Add(1, 1, "+"); break;
-				case SUB: operator = new CertainOperator.Sub(1, 1, "-"); break;
-				case MUL: operator = new CertainOperator.Mul(2, 2, "*"); break;
-				case DIV: operator = new CertainOperator.Div(2, 2, "/"); break;
-				case MOD: operator = new CertainOperator.Mod(2, 2, "%"); break;
-				case POW: operator = new CertainOperator.Pow(8, 8, "^"); break;
-				case HYPHEN_UNCERTAIN: operator = new UncertainOperator.Hyphen("-");
-				case VERTICAL_LINE_UNCERTAIN: operator = new UncertainOperator.VerticalLine("|");
+				case START_FLAG: operator = new CertainOperator.StartFlag("start_flag", FLAG_ID); break;
+				case END_FLAG: operator = new CertainOperator.EndFlag("end_flag", FLAG_ID); break;
+				case LEFT_BRACKETS: operator = new CertainOperator.LeftBrackets("(", BRACKETS_ID); break;
+				case RIGHT_BRACKETS: operator = new CertainOperator.RightBrackets(")", BRACKETS_ID); break;
+				case LEFT_ABS: operator = new CertainOperator.LeftAbs("|", ABS_ID); break;
+				case RIGHT_ABS: operator = new CertainOperator.RightAbs("|", ABS_ID); break;
+				case LOG_START: operator = new CertainOperator.LogStart("log", LOG_ID); break;
+				case LOG_END: operator = new CertainOperator.LogEnd(200, "~", LOG_ID); break;
+				case ADD: operator = new CertainOperator.Add(0, 0, "+"); break;
+				case SUB: operator = new CertainOperator.Sub(0, 0, "-"); break;
+				case MUL: operator = new CertainOperator.Mul(100, 100, "*"); break;
+				case DIV: operator = new CertainOperator.Div(100, 100, "/"); break;
+				case MOD: operator = new CertainOperator.Mod(100, 100, "%"); break;
+				case POW: operator = new CertainOperator.Pow(300, 300, "^"); break;
+				case NEGATE: operator = new CertainOperator.Negate(200, "-"); break;
+				case SIN: operator = new CertainOperator.Sin(200, "sin"); break;
+				case COS: operator = new CertainOperator.Cos(200, "cos"); break;
+				case TAN: operator = new CertainOperator.Tan(200, "tan"); break;
+				case ASIN: operator = new CertainOperator.ASin(200, "asin"); break;
+				case ACOS: operator = new CertainOperator.ACos(200, "acos"); break;
+				case ATAN: operator = new CertainOperator.ATan(200, "atan"); break;
+				case LN: operator = new CertainOperator.Ln(200, "ln"); break;
+				case LG: operator = new CertainOperator.Lg(200, "lg"); break;
+				case SQRT: operator = new CertainOperator.Sqrt(200, "sqrt"); break;
+				case FACT: operator = new CertainOperator.Fact(400, "!"); break;
+				case HYPHEN_UNCERTAIN: operator = new UncertainOperator.Hyphen("-"); break;
+				case VERTICAL_LINE_UNCERTAIN: operator = new UncertainOperator.VerticalLine("|"); break;
 				default: break;
 				}//switch
 				
@@ -1408,7 +1418,7 @@ abstract class ExpItem {
 		}//con_Variable
 		
 		public boolean hasNext() {
-			if (mCurValue <= mUpperLimit) {
+			if (mCurValue < mUpperLimit) {
 				return true;
 			}
 			
@@ -1416,8 +1426,13 @@ abstract class ExpItem {
 		}//hasNext
 		
 		public double nextValue() {
-			if (mCurValue <= mUpperLimit) {
-				mCurValue += mSpan;
+			if (hasNext()) {
+				if (mCurValue + mSpan <= mUpperLimit) {
+					mCurValue += mSpan;
+				} else {
+					mCurValue = mUpperLimit;
+				}//if-else
+				
 				return mCurValue;
 			}
 			
@@ -1434,12 +1449,12 @@ abstract class ExpItem {
 		}//toString
 		
 		
-		public class VariableAssistant {
+		public static class VariableAssistant {
 			private Map<String, Variable> mVariablesMap = new HashMap<>();
 			
 			
 			public VariableAssistant addVariable(String flagStr, Operand lowerLimit, boolean isLowerOpen
-				, Operand upperLimit, boolean isUpperOpen, Operand span, VariableAssistant variableAssistant) {
+				, Operand upperLimit, boolean isUpperOpen, Operand span) {
 				if (mVariablesMap.containsKey(flagStr)
 						|| Operator.OperatorAssistant.isIdentifierAlreadyExist(flagStr)) {
 					throw new VarIdentifierAlreadyExistException();

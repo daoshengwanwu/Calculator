@@ -24,9 +24,10 @@ public class VarAriExp {
 	private List<ExpItem> mExpItems = new ArrayList<>();
 	
 	
-	public static void main(String[] args) {	
+	public static void main(String[] args) {		
 		long startTime = System.currentTimeMillis();
-		VarAriExp exp = new VarAriExp("sin(1+2)", null);
+		//"-|-(2+8)-sin(2)+log(8)~10|"
+		VarAriExp exp = new VarAriExp("((((((((((|)|-|-(2+8)-sin(2)+log(8)~10||))))))))))", null);
 		long endTime = System.currentTimeMillis();
 		System.out.println(exp + "\n耗费时间：" + (endTime - startTime) + "毫秒");
 	}
@@ -122,8 +123,6 @@ public class VarAriExp {
 				
 				String curCharStr = String.valueOf(curChar);
 				if (ocSet.contains(curCharStr)) {
-					mExpItems.add(Operator.getOperator(curCharStr));
-					
 					if (isOperatorOpen) {
 						itemStr = expStr.substring(itemStartIndex, curIndex);
 						
@@ -134,6 +133,8 @@ public class VarAriExp {
 						mExpItems.add(Operator.getOperator(itemStr));
 						isOperatorOpen = false;
 					}//if
+					
+					mExpItems.add(Operator.getOperator(curCharStr));				
 				} else if (!isOperatorOpen) {
 					isOperatorOpen = true;
 					itemStartIndex = curIndex;
