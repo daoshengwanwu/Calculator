@@ -13,6 +13,7 @@ import com.daoshengwanwu.math_util.calculator.exception.ShouldNotOperateExceptio
 import com.daoshengwanwu.math_util.calculator.exception.SpecDirPriorNotExistException;
 import com.daoshengwanwu.math_util.calculator.exception.VarIdentifierAlreadyExistException;
 import com.daoshengwanwu.math_util.calculator.exception.VariableDomainErrorException;
+import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistException;
 import com.daoshengwanwu.math_util.calculator.exception.VariableSpanNotSuitableException;
 import com.daoshengwanwu.math_util.calculator.util.DigitUtil;
 
@@ -34,6 +35,16 @@ abstract class ExpItem {
 	public ItemType getItemType() {
 		return mItemType;
 	}//getItemType
+	
+	@Override
+	public String toString() {
+		switch (mItemType) {
+		case OPERATOR: return ((Operator)this).toString();
+		case OPERAND: return ((Operand)this).toString();
+		case VARIABLE: return ((Variable)this).toString();
+		default: return "";
+		}//switch-case
+	}//toString
 	
 	
 	/*
@@ -58,6 +69,10 @@ abstract class ExpItem {
 			return OperatorAssistant.getOperator(operatorStr);
 		}//getOperator
 		
+		public static boolean isIdentifierAlreadyExist(String identifierStr) {
+			return OperatorAssistant.isIdentifierAlreadyExist(identifierStr);
+		}//isIdentifierAlreadyExist
+		
 		public Operator(String operatorStr) {
 			super(OPERATOR_ITEM_TYPE);
 			
@@ -71,6 +86,11 @@ abstract class ExpItem {
 		public String getOperatorStr() {
 			return mOperatorStr;
 		}//getOperatorStr
+		
+		@Override
+		public String toString() {
+			return mOperatorStr;
+		}//toString
 		
 		public static abstract class CertainOperator extends Operator {
 			private static final boolean IS_CERTAIN = true;
@@ -1306,6 +1326,14 @@ abstract class ExpItem {
 		private double mValue;
 		
 		
+		public static Operand getOperand(String operandStr) {
+			return new Operand(Double.parseDouble(operandStr));
+		}//getOperand
+		
+		public static Operand getOperand(double operandValue) {
+			return new Operand(operandValue);
+		}//getOperand
+		
 		public Operand(double value) {
 			super(ItemType.OPERAND);
 			
@@ -1396,6 +1424,10 @@ abstract class ExpItem {
 			throw new NoNextValueException(mFlagStr);
 		}//nextValue
 		
+		public double curValue() {
+			return mCurValue;
+		}//curValue
+		
 		@Override
 		public String toString() {
 			return mFlagStr;
@@ -1406,7 +1438,7 @@ abstract class ExpItem {
 			private Map<String, Variable> mVariablesMap = new HashMap<>();
 			
 			
-			public void addVariable(String flagStr, Operand lowerLimit, boolean isLowerOpen
+			public VariableAssistant addVariable(String flagStr, Operand lowerLimit, boolean isLowerOpen
 				, Operand upperLimit, boolean isUpperOpen, Operand span, VariableAssistant variableAssistant) {
 				if (mVariablesMap.containsKey(flagStr)
 						|| Operator.OperatorAssistant.isIdentifierAlreadyExist(flagStr)) {
@@ -1418,11 +1450,26 @@ abstract class ExpItem {
 						lowerLimit, isLowerOpen,
 						upperLimit, isUpperOpen,
 						span));
+				
+				return this;
 			}//addVariable
 			
-			public void removeVariable(String flagStr) {
+			public Variable getVariable(String flagStr) {
+				if (hasVariable(flagStr)) {
+					return mVariablesMap.get(flagStr);
+				}//if
+				
+				throw new VariableNotExistException(flagStr);
+			}//getVariable
+			
+			public VariableAssistant removeVariable(String flagStr) {
 				mVariablesMap.remove(flagStr);
+				return this;
 			}//removeVariable
+			
+			public boolean hasVariable(String flagStr) {
+				return mVariablesMap.containsKey(flagStr);
+			}//hasVariable
 		}//class_VariableAssistant
 	}//class_Variable
 }//class_ExpItem
