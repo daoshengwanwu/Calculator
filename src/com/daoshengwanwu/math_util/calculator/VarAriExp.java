@@ -22,24 +22,20 @@ import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistExceptio
  * @author 白浩然
  */
 public class VarAriExp {
+	private static Set<String> sOcSet = new HashSet<>();
+	
 	private boolean mIsCertain = false;
 	private List<ExpItem> mExpItems = new ArrayList<>();
 	
 	
-	public static void main(String[] args) {
-		String expStr = "-1234567 \n	890123454e-10-10-pi*e";
-		long startTime = System.currentTimeMillis();
-		VarAriExp exp = new VarAriExp(expStr, null);
-		long endTime = System.currentTimeMillis();
+	static {
+		//初始化sOcSet
+		sOcSet.add("(");
+		sOcSet.add(")");
+		sOcSet.add("|");
 		
-		System.out.println(exp + "\n耗费时间：" + (endTime - startTime) + "毫秒");
-		
-
-		System.out.println("exp is certain: " + exp.isCertain());
-		exp.ensureAriExp();
-		System.out.println("exp is certain: " + exp.isCertain());
-		System.out.println(exp);
-	}
+	}//static
+	
 	
 	public VarAriExp(String expStr, VariableAssistant varAssist) {
 		char curChar;
@@ -50,11 +46,6 @@ public class VarAriExp {
 		boolean isOperandOpen = false;
 		boolean isIdentifierOpen = false;
 		
-		Set<String> ocSet = new HashSet<>();
-		ocSet.add("(");
-		ocSet.add(")");
-		ocSet.add("|");
-		
 		expStr = expStr.toLowerCase();
 		mExpItems.add(Operator.getStartFlag());
 		for (curIndex = 0; curIndex < expStr.length(); curIndex++) {
@@ -63,47 +54,28 @@ public class VarAriExp {
 			if (curChar == ' ' || curChar == '	' || curChar == '\n') {				
 				if (isOperandOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
-					mExpItems.add(Operand.getOperand(itemStr));
-					
+					mExpItems.add(analysisOperand(itemStr));
 					isOperandOpen = false;
 					
 				} else if (isOperatorOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
-					
-					if (!Operator.isIdentifierAlreadyExist(itemStr)) {
-						throw new OperatorNotExistException(itemStr);
-					}//if
-					
-					mExpItems.add(Operator.getOperator(itemStr));
+					mExpItems.add(analysisOperator(itemStr));
 					isOperatorOpen = false;
 					
 				} else if (isIdentifierOpen) {
-					itemStr = expStr.substring(itemStartIndex, curIndex);
-					
-					if (Operator.isIdentifierAlreadyExist(itemStr)) {
-						mExpItems.add(Operator.getOperator(itemStr));
-					} else if (Operand.hasConstant(itemStr)) { 
-						mExpItems.add(Operand.getConstant(itemStr));
-					} else if (null != varAssist && varAssist.hasVariable(itemStr)) {
-						mExpItems.add(varAssist.getVariable(itemStr));
-					} else {
-						throw new VariableNotExistException(itemStr);
-					}//if-else
-					
+					itemStr = expStr.substring(itemStartIndex, curIndex);			
+					mExpItems.add(analysisIdentifier(itemStr, varAssist));			
 					isIdentifierOpen = false;
+					
 				}//if-else
 				
 			} else if (curChar >= '0' && curChar <= '9' || curChar == '.') {
 				//curChar是数字字符
 				if (isOperatorOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
-					
-					if (!Operator.isIdentifierAlreadyExist(itemStr)) {
-						throw new OperatorNotExistException(itemStr);
-					}//if
-					
-					mExpItems.add(Operator.getOperator(itemStr));
+					mExpItems.add(analysisOperator(itemStr));
 					isOperatorOpen = false;
+					
 				}//if
 				
 				if (!isOperandOpen && !isIdentifierOpen) {
@@ -114,44 +86,31 @@ public class VarAriExp {
 			} else if ((curChar < 'a' || curChar > 'z')  
 					&& (curChar <'A' || curChar > 'Z') 
 					&& curChar != '_'
-					&& (curChar != '-' || !isOperandOpen || expStr.charAt(curIndex - 1) != 'e')) {				
+					&& (!isOperandOpen || curChar != '-'
+					|| expStr.charAt(curIndex - 1) != 'e')) {				
 				//curChar是特殊字符
 				if (isOperandOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
-					mExpItems.add(Operand.getOperand(itemStr));
-					
+					mExpItems.add(analysisOperand(itemStr));
 					isOperandOpen = false;
 					
 				} else if (isIdentifierOpen) {
-					itemStr = expStr.substring(itemStartIndex, curIndex);
-					
-					if (Operator.isIdentifierAlreadyExist(itemStr)) {
-						mExpItems.add(Operator.getOperator(itemStr));
-					} else if (Operand.hasConstant(itemStr)) { 
-						mExpItems.add(Operand.getConstant(itemStr));
-					} else if (null != varAssist && varAssist.hasVariable(itemStr)) {
-						mExpItems.add(varAssist.getVariable(itemStr));
-					} else {
-						throw new VariableNotExistException(itemStr);
-					}//if-else
-					
+					itemStr = expStr.substring(itemStartIndex, curIndex);			
+					mExpItems.add(analysisIdentifier(itemStr, varAssist));			
 					isIdentifierOpen = false;
+					
 				}//if-else
 				
 				String curCharStr = String.valueOf(curChar);
-				if (ocSet.contains(curCharStr)) {
+				if (sOcSet.contains(curCharStr)) {
 					if (isOperatorOpen) {
 						itemStr = expStr.substring(itemStartIndex, curIndex);
-						
-						if (!Operator.isIdentifierAlreadyExist(itemStr)) {
-							throw new OperatorNotExistException(itemStr);
-						}//if
-						
-						mExpItems.add(Operator.getOperator(itemStr));
+						mExpItems.add(analysisOperator(itemStr));
 						isOperatorOpen = false;
+						
 					}//if
 					
-					mExpItems.add(Operator.getOperator(curCharStr));				
+					mExpItems.add(analysisOperator(curCharStr));				
 				} else if (!isOperatorOpen) {
 					isOperatorOpen = true;
 					itemStartIndex = curIndex;
@@ -164,18 +123,12 @@ public class VarAriExp {
 				//curChar是标识符组成字符
 				if (isOperandOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
-					mExpItems.add(Operand.getOperand(itemStr));
-					
+					mExpItems.add(analysisOperand(itemStr));
 					isOperandOpen = false;
 					
 				} else if (isOperatorOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
-					
-					if (!Operator.isIdentifierAlreadyExist(itemStr)) {
-						throw new OperatorNotExistException(itemStr);
-					}//if
-					
-					mExpItems.add(Operator.getOperator(itemStr));
+					mExpItems.add(analysisOperator(itemStr));
 					isOperatorOpen = false;
 					
 				}//if-else
@@ -189,34 +142,19 @@ public class VarAriExp {
 		
 		if (isOperandOpen) {
 			itemStr = expStr.substring(itemStartIndex, curIndex);
-			mExpItems.add(Operand.getOperand(itemStr));
-			
+			mExpItems.add(analysisOperand(itemStr));
 			isOperandOpen = false;
 			
 		} else if (isOperatorOpen) {
 			itemStr = expStr.substring(itemStartIndex, curIndex);
-			
-			if (!Operator.isIdentifierAlreadyExist(itemStr)) {
-				throw new OperatorNotExistException(itemStr);
-			}//if
-			
-			mExpItems.add(Operator.getOperator(itemStr));
+			mExpItems.add(analysisOperator(itemStr));
 			isOperatorOpen = false;
 			
 		} else if (isIdentifierOpen) {
-			itemStr = expStr.substring(itemStartIndex, curIndex);
-			
-			if (Operator.isIdentifierAlreadyExist(itemStr)) {
-				mExpItems.add(Operator.getOperator(itemStr));
-			} else if (Operand.hasConstant(itemStr)) { 
-				mExpItems.add(Operand.getConstant(itemStr));
-			} else if (null != varAssist && varAssist.hasVariable(itemStr)) {
-				mExpItems.add(varAssist.getVariable(itemStr));
-			} else {
-				throw new VariableNotExistException(itemStr);
-			}//if-else
-			
+			itemStr = expStr.substring(itemStartIndex, curIndex);			
+			mExpItems.add(analysisIdentifier(itemStr, varAssist));			
 			isIdentifierOpen = false;
+			
 		}//if-else
 		
 		mExpItems.add(Operator.getEndFlag());
@@ -253,4 +191,28 @@ public class VarAriExp {
 	public String toString() {
 		return mExpItems.toString();
 	}//toString
+	
+	private ExpItem analysisIdentifier(String itemStr, VariableAssistant varAssist) {
+		if (Operator.isIdentifierAlreadyExist(itemStr)) {
+			return Operator.getOperator(itemStr);
+		} else if (Operand.hasConstant(itemStr)) { 
+			return Operand.getConstant(itemStr);
+		} else if (null != varAssist && varAssist.hasVariable(itemStr)) {
+			return varAssist.getVariable(itemStr);
+		} else {
+			throw new VariableNotExistException(itemStr);
+		}//if-else
+	}//analysisIdentifier
+	
+	private ExpItem analysisOperator(String itemStr) {
+		if (!Operator.isIdentifierAlreadyExist(itemStr)) {
+			throw new OperatorNotExistException(itemStr);
+		}//if
+		
+		return Operator.getOperator(itemStr);
+	}//analysisOperator
+	
+	private ExpItem analysisOperand(String itemStr) {
+		return Operand.getOperand(itemStr);
+	}//analysisOperand
 }//class_VarAriExp

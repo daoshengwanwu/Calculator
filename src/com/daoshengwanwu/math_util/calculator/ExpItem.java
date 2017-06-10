@@ -2,6 +2,7 @@ package com.daoshengwanwu.math_util.calculator;
 
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import com.daoshengwanwu.math_util.calculator.exception.OperandNumException;
 import com.daoshengwanwu.math_util.calculator.exception.OperandOutOfBoundsException;
 import com.daoshengwanwu.math_util.calculator.exception.ShouldNotOperateException;
 import com.daoshengwanwu.math_util.calculator.exception.SpecDirPriorNotExistException;
+import com.daoshengwanwu.math_util.calculator.exception.VarAssistHasNoNextValueException;
 import com.daoshengwanwu.math_util.calculator.exception.VarIdentifierAlreadyExistException;
 import com.daoshengwanwu.math_util.calculator.exception.VariableDomainErrorException;
 import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistException;
@@ -1479,7 +1481,7 @@ abstract class ExpItem {
 		
 		
 		public static class VariableAssistant {
-			private Map<String, Variable> mVariablesMap = new HashMap<>();
+			private Map<String, Variable> mVariablesMap = new LinkedHashMap<>();
 			
 			
 			public VariableAssistant addVariable(String flagStr, Operand lowerLimit, boolean isLowerOpen
@@ -1514,6 +1516,29 @@ abstract class ExpItem {
 			public boolean hasVariable(String flagStr) {
 				return mVariablesMap.containsKey(flagStr);
 			}//hasVariable
+			
+			public boolean hasNext() {
+				for (String varStr : mVariablesMap.keySet()) {
+					Variable var = mVariablesMap.get(varStr);
+					if (var.hasNext()) {
+						return true;
+					}//if
+				}//for
+				
+				return false;
+			}//hasNext
+			
+			public void nextValue() {
+				for (String varStr : mVariablesMap.keySet()) {
+					Variable var = mVariablesMap.get(varStr);
+					if (var.hasNext()) {
+						var.nextValue();
+						return;
+					}//if					
+				}//for
+				
+				throw new VarAssistHasNoNextValueException();
+			}//nextValue
 		}//class_VariableAssistant
 	}//class_Variable
 }//class_ExpItem
