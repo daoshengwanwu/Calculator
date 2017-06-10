@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operand;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operator;
+import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.UncertainOperator;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Variable.VariableAssistant;
 import com.daoshengwanwu.math_util.calculator.exception.OperatorNotExistException;
 import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistException;
@@ -21,21 +22,30 @@ import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistExceptio
  * @author 白浩然
  */
 public class VarAriExp {
+	private boolean mIsCertain = false;
 	private List<ExpItem> mExpItems = new ArrayList<>();
 	
 	
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
+		String expStr = "|-|-||1.83687546e6*10+(-pi)+|";
+		
 		long startTime = System.currentTimeMillis();
-		//"-|-(2+8)-sin(2)+log(8)~10|"
-		VarAriExp exp = new VarAriExp("((((((((((|)|-|-(2+8)-sin(2)+log(8)~10||))))))))))", null);
+		VarAriExp exp = new VarAriExp(expStr, null);
 		long endTime = System.currentTimeMillis();
+		
 		System.out.println(exp + "\n耗费时间：" + (endTime - startTime) + "毫秒");
+		
+
+		System.out.println("exp is certain: " + exp.isCertain());
+		exp.ensureAriExp();
+		System.out.println("exp is certain: " + exp.isCertain());
+		System.out.println(exp);
 	}
 	
 	public VarAriExp(String expStr, VariableAssistant varAssist) {
 		char curChar;
 		int curIndex;
-		int itemStartIndex = -1;	
+		int itemStartIndex = -1;
 		String itemStr = null;
 		boolean isOperatorOpen = false;
 		boolean isOperandOpen = false;
@@ -46,6 +56,8 @@ public class VarAriExp {
 		ocSet.add(")");
 		ocSet.add("|");
 		
+		expStr = expStr.toLowerCase();
+		mExpItems.add(Operator.getStartFlag());
 		for (curIndex = 0; curIndex < expStr.length(); curIndex++) {
 			curChar = expStr.charAt(curIndex);
 			
@@ -71,6 +83,8 @@ public class VarAriExp {
 					
 					if (Operator.isIdentifierAlreadyExist(itemStr)) {
 						mExpItems.add(Operator.getOperator(itemStr));
+					} else if (Operand.hasConstant(itemStr)) { 
+						mExpItems.add(Operand.getConstant(itemStr));
 					} else if (null != varAssist && varAssist.hasVariable(itemStr)) {
 						mExpItems.add(varAssist.getVariable(itemStr));
 					} else {
@@ -80,7 +94,7 @@ public class VarAriExp {
 					isIdentifierOpen = false;
 				}//if-else
 				
-			} else if (curChar >= '0' && curChar <= '9') {
+			} else if (curChar >= '0' && curChar <= '9' || curChar == '.') {
 				//curChar是数字字符
 				if (isOperatorOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
@@ -99,7 +113,7 @@ public class VarAriExp {
 				}//if
 				
 			} else if ((curChar < 'a' || curChar > 'z')
-					&& (curChar <'A' || curChar > 'Z') && curChar != '_') {
+					&& (curChar <'A' || curChar > 'Z') && curChar != '_') {				
 				//curChar是特殊字符
 				if (isOperandOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
@@ -112,6 +126,8 @@ public class VarAriExp {
 					
 					if (Operator.isIdentifierAlreadyExist(itemStr)) {
 						mExpItems.add(Operator.getOperator(itemStr));
+					} else if (Operand.hasConstant(itemStr)) { 
+						mExpItems.add(Operand.getConstant(itemStr));
 					} else if (null != varAssist && varAssist.hasVariable(itemStr)) {
 						mExpItems.add(varAssist.getVariable(itemStr));
 					} else {
@@ -140,7 +156,7 @@ public class VarAriExp {
 					itemStartIndex = curIndex;
 				}//if-else
 				
-			} else {
+			} else if (curChar != 'e' || !isOperandOpen) {
 				//curChar是字母字符
 				if (isOperandOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);
@@ -164,7 +180,6 @@ public class VarAriExp {
 					isIdentifierOpen = true;
 					itemStartIndex = curIndex;
 				}//if
-				
 			}//if-else
 		}//for
 		
@@ -189,6 +204,8 @@ public class VarAriExp {
 			
 			if (Operator.isIdentifierAlreadyExist(itemStr)) {
 				mExpItems.add(Operator.getOperator(itemStr));
+			} else if (Operand.hasConstant(itemStr)) { 
+				mExpItems.add(Operand.getConstant(itemStr));
 			} else if (null != varAssist && varAssist.hasVariable(itemStr)) {
 				mExpItems.add(varAssist.getVariable(itemStr));
 			} else {
@@ -197,8 +214,37 @@ public class VarAriExp {
 			
 			isIdentifierOpen = false;
 		}//if-else
-	}
+		
+		mExpItems.add(Operator.getEndFlag());
+	}//con_VarAriExp
 
+	public void ensureAriExp() {
+		if (mIsCertain) {
+			return;
+		}//if
+		
+		ExpItem curItem;
+		Operator curOperator;
+		UncertainOperator curUncertainOperator;
+		for (int i = 0; i < mExpItems.size(); i++) {
+			curItem = mExpItems.get(i);
+			if (curItem.getItemType() == ExpItem.ItemType.OPERATOR) {
+				curOperator = (Operator)curItem;
+				if (!curOperator.isCertain()) {
+					curUncertainOperator = (UncertainOperator)curOperator;
+					mExpItems.set(i, curUncertainOperator
+							.getCertainOperator(mExpItems.get(i - 1)));
+				}//if
+			}//if
+		}//for
+		
+		mIsCertain = true;
+	}//ensureAriExp
+	
+	public boolean isCertain() {
+		return mIsCertain;
+	}//isCertain
+	
 	@Override
 	public String toString() {
 		return mExpItems.toString();

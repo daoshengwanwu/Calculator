@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.daoshengwanwu.math_util.calculator.exception.ConstantNotExistException;
 import com.daoshengwanwu.math_util.calculator.exception.IllegalIdentifierException;
 import com.daoshengwanwu.math_util.calculator.exception.NoNextValueException;
 import com.daoshengwanwu.math_util.calculator.exception.OperandNumException;
@@ -72,6 +73,14 @@ abstract class ExpItem {
 		public static boolean isIdentifierAlreadyExist(String identifierStr) {
 			return OperatorAssistant.isIdentifierAlreadyExist(identifierStr);
 		}//isIdentifierAlreadyExist
+		
+		public static Operator getStartFlag() {
+			return OperatorAssistant.getOperator(OperatorAssistant.START_FLAG);
+		}//getStartFlag
+		
+		public static Operator getEndFlag() {
+			return OperatorAssistant.getOperator(OperatorAssistant.END_FLAG);
+		}//getEndFlag
 		
 		public Operator(String operatorStr) {
 			super(OPERATOR_ITEM_TYPE);
@@ -1331,6 +1340,14 @@ abstract class ExpItem {
 	public static class Operand extends ExpItem {	
 		//操作数的有效位数
 		private static final int SIGNIFICANCE_DIGIT = 15;
+		private static final Map<String, Operand> sConstantsMap = new HashMap<>();
+		
+		static {
+			//初始化常量表
+			sConstantsMap.put("pi", new Operand(Math.PI));
+			sConstantsMap.put("e", new Operand(Math.E));
+			
+		}//static
 		
 		//操作数的值
 		private double mValue;
@@ -1343,6 +1360,18 @@ abstract class ExpItem {
 		public static Operand getOperand(double operandValue) {
 			return new Operand(operandValue);
 		}//getOperand
+		
+		public static boolean hasConstant(String constantStr) {
+			return sConstantsMap.containsKey(constantStr);
+		}//hasContant
+		
+		public static Operand getConstant(String constantStr) {
+			if (hasConstant(constantStr)) {
+				return sConstantsMap.get(constantStr);
+			}//if
+			
+			throw new ConstantNotExistException(constantStr);
+		}//getConstant
 		
 		public Operand(double value) {
 			super(ItemType.OPERAND);
@@ -1455,7 +1484,7 @@ abstract class ExpItem {
 			
 			public VariableAssistant addVariable(String flagStr, Operand lowerLimit, boolean isLowerOpen
 				, Operand upperLimit, boolean isUpperOpen, Operand span) {
-				if (mVariablesMap.containsKey(flagStr)
+				if (mVariablesMap.containsKey(flagStr) || Operand.hasConstant(flagStr)
 						|| Operator.OperatorAssistant.isIdentifierAlreadyExist(flagStr)) {
 					throw new VarIdentifierAlreadyExistException();
 				}//if
