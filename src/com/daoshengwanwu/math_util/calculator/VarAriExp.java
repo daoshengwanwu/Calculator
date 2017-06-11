@@ -25,6 +25,7 @@ public class VarAriExp {
 	private static Set<String> sOcSet = new HashSet<>();
 	
 	private boolean mIsCertain = false;
+	private VariableAssistant mVarAssist;
 	private List<ExpItem> mExpItems = new ArrayList<>();
 	
 	
@@ -38,6 +39,8 @@ public class VarAriExp {
 	
 	
 	public VarAriExp(String expStr, VariableAssistant varAssist) {
+		mVarAssist = varAssist;
+		
 		char curChar;
 		int curIndex;
 		int itemStartIndex = -1;
@@ -64,7 +67,7 @@ public class VarAriExp {
 					
 				} else if (isIdentifierOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);			
-					mExpItems.add(analysisIdentifier(itemStr, varAssist));			
+					mExpItems.add(analysisIdentifier(itemStr));			
 					isIdentifierOpen = false;
 					
 				}//if-else
@@ -96,7 +99,7 @@ public class VarAriExp {
 					
 				} else if (isIdentifierOpen) {
 					itemStr = expStr.substring(itemStartIndex, curIndex);			
-					mExpItems.add(analysisIdentifier(itemStr, varAssist));			
+					mExpItems.add(analysisIdentifier(itemStr));			
 					isIdentifierOpen = false;
 					
 				}//if-else
@@ -152,7 +155,7 @@ public class VarAriExp {
 			
 		} else if (isIdentifierOpen) {
 			itemStr = expStr.substring(itemStartIndex, curIndex);			
-			mExpItems.add(analysisIdentifier(itemStr, varAssist));			
+			mExpItems.add(analysisIdentifier(itemStr));			
 			isIdentifierOpen = false;
 			
 		}//if-else
@@ -187,18 +190,26 @@ public class VarAriExp {
 		return mIsCertain;
 	}//isCertain
 	
+	public List<ExpItem> getExpItemList() {
+		return mExpItems;
+	}//getExpItemList
+	
+	public VariableAssistant getVariableAssistant() {
+		return mVarAssist;
+	}//getVariableAssistant
+	
 	@Override
 	public String toString() {
 		return mExpItems.toString();
 	}//toString
 	
-	private ExpItem analysisIdentifier(String itemStr, VariableAssistant varAssist) {
+	private ExpItem analysisIdentifier(String itemStr) {
 		if (Operator.isIdentifierAlreadyExist(itemStr)) {
 			return Operator.getOperator(itemStr);
 		} else if (Operand.hasConstant(itemStr)) { 
 			return Operand.getConstant(itemStr);
-		} else if (null != varAssist && varAssist.hasVariable(itemStr)) {
-			return varAssist.getVariable(itemStr);
+		} else if (null != mVarAssist && mVarAssist.hasVariable(itemStr)) {
+			return mVarAssist.getVariable(itemStr);
 		} else {
 			throw new VariableNotExistException(itemStr);
 		}//if-else

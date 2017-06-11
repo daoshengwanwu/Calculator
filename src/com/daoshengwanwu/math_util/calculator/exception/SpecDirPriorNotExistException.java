@@ -1,7 +1,7 @@
 package com.daoshengwanwu.math_util.calculator.exception;
 
 
-public class SpecDirPriorNotExistException extends Exception {
+public class SpecDirPriorNotExistException extends RuntimeException {
 	private static final long serialVersionUID = 1380518926247314494L;
 
 	public SpecDirPriorNotExistException(String operatorStr, String directionStr) {
