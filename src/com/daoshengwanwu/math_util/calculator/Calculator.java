@@ -32,8 +32,8 @@ public class Calculator {
 	}//calculate
 	
 	public static ResultGenerator calculate(VarAriExp varAriExp) {
-		return null;
-	}
+		return new ResultGenerator(varAriExp);
+	}//calculate
 	
 	private static double calculateCurrentValue(VarAriExp varAriExp) {
 		//每次计算前清空运算符栈和操作数栈
@@ -148,6 +148,30 @@ public class Calculator {
 	
 	
 	public static class ResultGenerator {
+		private VarAriExp mVarAriExp;
+		private VariableAssistant mVarAssist;
 		
-	}
+		
+		public ResultGenerator(VarAriExp varAriExp) {
+			mVarAriExp = varAriExp;
+			mVarAssist = mVarAriExp.getVariableAssistant();
+		}//con_ResultGenerator
+		
+		public double curValue() {
+			return Calculator.calculateCurrentValue(mVarAriExp);
+		}//curValue
+		
+		public boolean hasNext() {
+			if (null == mVarAssist) {
+				return false;
+			}//if
+			
+			return mVarAssist.hasNext();
+		}//hasNext
+		
+		public double nextValue() {
+			mVarAssist.nextValue();
+			return Calculator.calculateCurrentValue(mVarAriExp);
+		}//nextValue
+	}//class_ResultGenerator
 }//class_Calculator
