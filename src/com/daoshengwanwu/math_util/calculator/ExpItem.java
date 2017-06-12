@@ -1409,7 +1409,7 @@ public abstract class ExpItem {
 		public static class VariableAssistant {
 			private Map<String, Variable> mVariablesMap = new LinkedHashMap<>();
 			
-			
+
 			public VariableAssistant addVariable(String flagStr, Operand lowerLimit, boolean isLowerOpen
 				, Operand upperLimit, boolean isUpperOpen, Operand span) {
 				if (mVariablesMap.containsKey(flagStr) || Operand.hasConstant(flagStr)
