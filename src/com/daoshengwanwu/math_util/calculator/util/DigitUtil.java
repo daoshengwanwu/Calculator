@@ -8,7 +8,7 @@ public class DigitUtil {
 	/**
 	 * @author 白浩然
 	 * @param value 要被规范化的数
-	 * @param significantDigit 有效位数
+	 * @param significantDigits 有效位数
 	 * @return 被规范化后的值, 被规范化后的double值可以直接通过 "=="运算符来判等
 	 */
 	public static double reserveSignificantDigits(double value, int significantDigits) {
@@ -27,13 +27,13 @@ public class DigitUtil {
 		
 		return (double)Math.round(value * auxiliary) / auxiliary;
 	}//reserveSignificantDigits
-	
+
 	/**
 	 * @author 白浩然
 	 * @param value 要计算整数位数的数
 	 * @return value 的整数位数
 	 */
-	public static int getIntegerFigures(double value) {
+	private static int getIntegerFigures(double value) {
 		int integerFigures = 0;
 		long lValue = (long)value;
 		

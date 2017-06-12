@@ -6,40 +6,43 @@ import java.util.List;
 
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operand;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.CertainOperator;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.CertainOperator.OperatorType;
+import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.CertainOperator.CertainOperatorType;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Variable;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Variable.VariableAssistant;
 import com.daoshengwanwu.math_util.calculator.exception.OperatorNotMatchException;
+import com.daoshengwanwu.math_util.calculator.exception.ResultErrorException;
 import com.daoshengwanwu.math_util.calculator.util.Stack;
 
 
 public class Calculator {
-	private static Stack<Operand> sOperandStack = new Stack<>();
-	private static Stack<CertainOperator> sOperatorStack = new Stack<>();
+	private Stack<Operand> mOperandStack = new Stack<>();
+	private Stack<CertainOperator> mOperatorStack = new Stack<>();
 	
 	
-	public static double calculate(String expStr) {
+	public double calculate(String expStr) {
 		AriExp ariExp = new AriExp(expStr);
+		
 		return calculate(ariExp);
 	}//calculate
 	
-	public static ResultGenerator calculate(String expStr, VariableAssistant varAssist) {
+	public ResultGenerator calculate(String expStr, VariableAssistant varAssist) {
 		VarAriExp varAriExp = new VarAriExp(expStr, varAssist);
+		
 		return calculate(varAriExp);
 	}//calculate
 	
-	public static double calculate(AriExp ariExp) {
+	public double calculate(AriExp ariExp) {
 		return calculateCurrentValue(ariExp);
 	}//calculate
 	
-	public static ResultGenerator calculate(VarAriExp varAriExp) {
+	public ResultGenerator calculate(VarAriExp varAriExp) {
 		return new ResultGenerator(varAriExp);
 	}//calculate
 	
-	private static double calculateCurrentValue(VarAriExp varAriExp) {
+	private double calculateCurrentValue(VarAriExp varAriExp) {
 		//每次计算前清空运算符栈和操作数栈
-		sOperandStack.clear();
-		sOperatorStack.clear();
+		mOperandStack.clear();
+		mOperatorStack.clear();
 		
 		//如果表达式元素不都是确定的，则使之确定
 		if (!varAriExp.isCertain()) {
@@ -50,25 +53,30 @@ public class Calculator {
 		int curIndex = 0;
 		int curLeftPrior;
 		int topRightPrior;
-		ExpItem curItem = null;
-		CertainOperator curOperator = null;
-		CertainOperator topOperator = null;
+		ExpItem curItem;
+		CertainOperator curOperator;
+		CertainOperator topOperator;
 		List<ExpItem> expItems = varAriExp.getExpItemList();
 		while (curIndex < expItems.size()) {
 			curItem = expItems.get(curIndex);
 			
 			switch (curItem.getItemType()) {
 			case OPERAND: {
-				sOperandStack.push((Operand)curItem);
+				mOperandStack.push((Operand)curItem);
+				curIndex++;
+			} break;
+			case VARIABLE: {
+				curValue = ((Variable)curItem).curValue();
+				mOperandStack.push(Operand.getOperand(curValue));
 				curIndex++;
 			} break;
 			case OPERATOR: {
 				curOperator = (CertainOperator)curItem;
-				switch (curOperator.getOperatorType()) {
+				switch (curOperator.getCertainOperatorType()) {
 				case NORMAL: {
 					if (curOperator.isLeftDirPriorExist()) {
-						topOperator = sOperatorStack.getTop();
-						switch (topOperator.getOperatorType()) {
+						topOperator = mOperatorStack.getTop();
+						switch (topOperator.getCertainOperatorType()) {
 						case NORMAL: 
 						case CLOSE: {
 							if (topOperator.isRightDirPriorExist()) {
@@ -78,7 +86,7 @@ public class Calculator {
 								if (curLeftPrior <= topRightPrior) {
 									makeOperate();
 								} else {
-									sOperatorStack.push(curOperator);
+									mOperatorStack.push(curOperator);
 									curIndex++;
 								}//if-else
 							} else {
@@ -86,29 +94,29 @@ public class Calculator {
 							}//if-else
 						} break;
 						case OPEN: {
-							sOperatorStack.push(curOperator);
+							mOperatorStack.push(curOperator);
 							curIndex++;
 						} break;
 						}//switch-case
 						
 					} else {
-						sOperatorStack.push(curOperator);
+						mOperatorStack.push(curOperator);
 						curIndex++;
 					}//if-else
 				} break;
 				case OPEN: {
 					//如果当前运算符是OPEN性质的，直接入栈
-					sOperatorStack.push(curOperator);
+					mOperatorStack.push(curOperator);
 					curIndex++;
 				} break;
 				case CLOSE: {
-					topOperator = sOperatorStack.getTop();
+					topOperator = mOperatorStack.getTop();
 					makeOperate();
 					
-					if (topOperator.getOperatorType() == OperatorType.OPEN) {
+					if (topOperator.getCertainOperatorType() == CertainOperatorType.OPEN) {
 						if (topOperator.getId() == curOperator.getId()) {
 							if (curOperator.isNeedPush()) {
-								sOperatorStack.push(curOperator);
+								mOperatorStack.push(curOperator);
 							}//if
 							curIndex++;
 						} else {
@@ -119,23 +127,18 @@ public class Calculator {
 				} break;
 				}//switch
 			} break;
-			case VARIABLE: {
-				curValue = ((Variable)curItem).curValue();
-				sOperandStack.push(Operand.getOperand(curValue));
-				curIndex++;
-			} break;
 			}//switch-case
 		} //while
 		
-		if (sOperandStack.isEmpty()) {
-			return 0.0;
+		if (mOperandStack.isEmpty()) {
+			throw new ResultErrorException();
 		}//if
 		
-		return sOperandStack.pop().getValue();
+		return mOperandStack.pop().getValue();
 	}//calculateCurrentValue
 	
-	private static void makeOperate() {		
-		CertainOperator operator = sOperatorStack.pop();
+	private void makeOperate() {		
+		CertainOperator operator = mOperatorStack.pop();
 		
 		if (!operator.isNeedOperate()) {
 			return;
@@ -145,38 +148,36 @@ public class Calculator {
 		Operand[] operands = new Operand[operandNum];
 		
 		for (int i = 1; i <= operandNum; i++) {
-			operands[operands.length - i] = sOperandStack.pop();
+			operands[operands.length - i] = mOperandStack.pop();
 		}//for
 		
-		sOperandStack.push(operator.operate(operands));
+		mOperandStack.push(operator.operate(operands));
 	}//makeOperate
 	
 	
 	public static class ResultGenerator {
 		private VarAriExp mVarAriExp;
+		private Calculator mCalculator;
 		private VariableAssistant mVarAssist;
 		
 		
-		public ResultGenerator(VarAriExp varAriExp) {
+		ResultGenerator(VarAriExp varAriExp) {
 			mVarAriExp = varAriExp;
+			mCalculator = new Calculator();
 			mVarAssist = mVarAriExp.getVariableAssistant();
 		}//con_ResultGenerator
 		
-		public double curValue() {
-			return Calculator.calculateCurrentValue(mVarAriExp);
+		double curValue() {
+			return mCalculator.calculateCurrentValue(mVarAriExp);
 		}//curValue
 		
-		public boolean hasNext() {
-			if (null == mVarAssist) {
-				return false;
-			}//if
-			
-			return mVarAssist.hasNext();
+		boolean hasNext() {
+			return null != mVarAssist && mVarAssist.hasNext();
 		}//hasNext
 		
 		public double nextValue() {
 			mVarAssist.nextValue();
-			return Calculator.calculateCurrentValue(mVarAriExp);
+			return mCalculator.calculateCurrentValue(mVarAriExp);
 		}//nextValue
 		
 		public List<Double> getResultList() {

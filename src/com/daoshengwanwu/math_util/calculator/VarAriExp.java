@@ -10,7 +10,6 @@ import com.daoshengwanwu.math_util.calculator.ExpItem.Operand;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operator;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.UncertainOperator;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Variable.VariableAssistant;
-import com.daoshengwanwu.math_util.calculator.exception.OperatorNotExistException;
 import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistException;
 
 
@@ -44,7 +43,7 @@ public class VarAriExp {
 		char curChar;
 		int curIndex;
 		int itemStartIndex = -1;
-		String itemStr = null;
+		String itemStr;
 		boolean isOperatorOpen = false;
 		boolean isOperandOpen = false;
 		boolean isIdentifierOpen = false;
@@ -146,24 +145,21 @@ public class VarAriExp {
 		if (isOperandOpen) {
 			itemStr = expStr.substring(itemStartIndex, curIndex);
 			mExpItems.add(analysisOperand(itemStr));
-			isOperandOpen = false;
 			
 		} else if (isOperatorOpen) {
 			itemStr = expStr.substring(itemStartIndex, curIndex);
 			mExpItems.add(analysisOperator(itemStr));
-			isOperatorOpen = false;
 			
 		} else if (isIdentifierOpen) {
 			itemStr = expStr.substring(itemStartIndex, curIndex);			
-			mExpItems.add(analysisIdentifier(itemStr));			
-			isIdentifierOpen = false;
+			mExpItems.add(analysisIdentifier(itemStr));
 			
 		}//if-else
 		
 		mExpItems.add(Operator.getEndFlag());
 	}//con_VarAriExp
 
-	public void ensureAriExp() {
+	void ensureAriExp() {
 		if (mIsCertain) {
 			return;
 		}//if
@@ -186,15 +182,15 @@ public class VarAriExp {
 		mIsCertain = true;
 	}//ensureAriExp
 	
-	public boolean isCertain() {
+	boolean isCertain() {
 		return mIsCertain;
 	}//isCertain
 	
-	public List<ExpItem> getExpItemList() {
+	List<ExpItem> getExpItemList() {
 		return mExpItems;
 	}//getExpItemList
 	
-	public VariableAssistant getVariableAssistant() {
+	VariableAssistant getVariableAssistant() {
 		return mVarAssist;
 	}//getVariableAssistant
 	
@@ -208,7 +204,7 @@ public class VarAriExp {
 			return Operator.getOperator(itemStr);
 		} else if (Operand.hasConstant(itemStr)) { 
 			return Operand.getConstant(itemStr);
-		} else if (null != mVarAssist && mVarAssist.hasVariable(itemStr)) {
+		} else if (null != mVarAssist) {
 			return mVarAssist.getVariable(itemStr);
 		} else {
 			throw new VariableNotExistException(itemStr);
@@ -216,10 +212,6 @@ public class VarAriExp {
 	}//analysisIdentifier
 	
 	private ExpItem analysisOperator(String itemStr) {
-		if (!Operator.isIdentifierAlreadyExist(itemStr)) {
-			throw new OperatorNotExistException(itemStr);
-		}//if
-		
 		return Operator.getOperator(itemStr);
 	}//analysisOperator
 	
