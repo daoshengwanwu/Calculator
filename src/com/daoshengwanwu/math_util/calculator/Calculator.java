@@ -1,6 +1,7 @@
 package com.daoshengwanwu.math_util.calculator;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operand;
@@ -126,6 +127,10 @@ public class Calculator {
 			}//switch-case
 		} //while
 		
+		if (sOperandStack.isEmpty()) {
+			return 0.0;
+		}//if
+		
 		return sOperandStack.pop().getValue();
 	}//calculateCurrentValue
 	
@@ -173,5 +178,16 @@ public class Calculator {
 			mVarAssist.nextValue();
 			return Calculator.calculateCurrentValue(mVarAriExp);
 		}//nextValue
+		
+		public List<Double> getResultList() {
+			List<Double> resultList = new ArrayList<>();
+			
+			resultList.add(curValue());
+			while (hasNext()) {
+				resultList.add(nextValue());
+			}//while
+			
+			return resultList;
+		}//getResultList
 	}//class_ResultGenerator
 }//class_Calculator

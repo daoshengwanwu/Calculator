@@ -1340,6 +1340,15 @@ public abstract class ExpItem {
 		public String toString() {
 			return String.valueOf(mValue);
 		}//toString
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Operand)) {
+				return false;
+			}//if
+			
+			return getValue() == ((Operand)obj).getValue();
+		}//equals
 	}//class_Operand
 	
 	/*
