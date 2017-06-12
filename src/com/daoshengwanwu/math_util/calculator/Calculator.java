@@ -161,17 +161,17 @@ public class Calculator {
 		private VariableAssistant mVarAssist;
 		
 		
-		ResultGenerator(VarAriExp varAriExp) {
+		private ResultGenerator(VarAriExp varAriExp) {
 			mVarAriExp = varAriExp;
 			mCalculator = new Calculator();
 			mVarAssist = mVarAriExp.getVariableAssistant();
 		}//con_ResultGenerator
 		
-		double curValue() {
+		public double curValue() {
 			return mCalculator.calculateCurrentValue(mVarAriExp);
 		}//curValue
 		
-		boolean hasNext() {
+		public boolean hasNext() {
 			return null != mVarAssist && mVarAssist.hasNext();
 		}//hasNext
 		
