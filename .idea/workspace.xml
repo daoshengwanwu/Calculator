@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7c670634-948c-4a64-bc62-b87e8815a235" name="Default" comment="访问修饰符的修改">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+    <list default="true" id="7c670634-948c-4a64-bc62-b87e8815a235" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java" afterPath="$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/ExpItem.java" afterPath="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/ExpItem.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/VarAriExp.java" afterPath="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/VarAriExp.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,11 +18,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Launcher.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Launcher.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+            <state relative-caret-position="288">
+              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -29,32 +30,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VariableSpanNotSuitableException.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VariableSpanNotSuitableException.java">
+      <file leaf-file-name="Calculator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/Calculator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DigitUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/util/DigitUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Stack.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/util/Stack.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="1024">
+              <caret line="155" column="4" lean-forward="true" selection-start-line="155" selection-start-column="4" selection-end-line="155" selection-end-column="4" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#calculate#0;class#Calculator#0" expanded="false" />
+                <element signature="method#calculate#1;class#Calculator#0" expanded="false" />
+                <element signature="method#calculateCurrentValue#0;class#Calculator#0" expanded="false" />
+                <element signature="method#makeOperate#0;class#Calculator#0" expanded="false" />
+                <element signature="class#ResultGenerator#0;class#Calculator#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -62,20 +50,11 @@
       <file leaf-file-name="AriExp.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/AriExp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Calculator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/Calculator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
-              <caret line="194" column="0" lean-forward="false" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+            <state relative-caret-position="128">
+              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#120#121#0" expanded="true" />
+                <element signature="e#146#147#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -84,9 +63,43 @@
       <file leaf-file-name="ExpItem.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/ExpItem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="23" column="2" lean-forward="true" selection-start-line="23" selection-start-column="2" selection-end-line="23" selection-end-column="2" />
-              <folding />
+            <state relative-caret-position="33760">
+              <caret line="1408" column="15" lean-forward="false" selection-start-line="1408" selection-start-column="8" selection-end-line="1408" selection-end-column="15" />
+              <folding>
+                <element signature="e#1567#1568#0" expanded="true" />
+                <element signature="e#1594#1595#0" expanded="true" />
+                <element signature="class#ItemType#0;class#ExpItem#0" expanded="false" />
+                <element signature="method#isIdentifierAlreadyExist#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+                <element signature="method#Operator#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+                <element signature="e#3349#3350#0" expanded="true" />
+                <element signature="e#3422#3423#0" expanded="true" />
+                <element signature="e#3509#3510#0" expanded="true" />
+                <element signature="e#3582#3583#0" expanded="true" />
+                <element signature="e#13881#13882#0" expanded="true" />
+                <element signature="e#13930#13931#0" expanded="true" />
+                <element signature="e#15198#15199#0" expanded="true" />
+                <element signature="e#15247#15248#0" expanded="true" />
+                <element signature="e#15646#15647#0" expanded="true" />
+                <element signature="e#15695#15696#0" expanded="true" />
+                <element signature="e#16236#16237#0" expanded="true" />
+                <element signature="e#16285#16286#0" expanded="true" />
+                <element signature="e#16826#16827#0" expanded="true" />
+                <element signature="e#16875#16876#0" expanded="true" />
+                <element signature="e#17410#17411#0" expanded="true" />
+                <element signature="e#17459#17460#0" expanded="true" />
+                <element signature="e#19126#19127#0" expanded="true" />
+                <element signature="e#19174#19175#0" expanded="true" />
+                <element signature="e#21203#21204#0" expanded="true" />
+                <element signature="e#21269#21270#0" expanded="true" />
+                <element signature="method#newOperator#0;class#OperatorAssistant#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+                <element signature="class#Operand#0;class#ExpItem#0" expanded="false" />
+                <element signature="method#getOperand#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+                <element signature="method#getConstant#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+                <element signature="method#Operand#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+                <element signature="method#Variable#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+                <element signature="method#nextValue#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+                <element signature="class#VariableAssistant#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -94,24 +107,28 @@
       <file leaf-file-name="VarAriExp.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/VarAriExp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="42" column="21" lean-forward="true" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VarIdentifierAlreadyExistException.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VarIdentifierAlreadyExistException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="1984">
+              <caret line="221" column="0" lean-forward="true" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#VarAriExp#0;class#VarAriExp#0" expanded="false" />
+                <element signature="e#4633#4634#0" expanded="true" />
+                <element signature="e#4657#4658#0" expanded="true" />
+                <element signature="e#4719#4720#0" expanded="true" />
+                <element signature="e#4753#4754#0" expanded="true" />
+                <element signature="method#ensureAriExp#0;class#VarAriExp#0" expanded="false" />
+                <element signature="method#analysisIdentifier#0;class#VarAriExp#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>public</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -137,14 +154,14 @@
         <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VariableDomainErrorException.java" />
         <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VariableNotExistException.java" />
         <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VarIdentifierAlreadyExistException.java" />
-        <option value="$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java" />
         <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/util/DigitUtil.java" />
-        <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/util/Stack.java" />
         <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/AriExp.java" />
         <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/Calculator.java" />
+        <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VariableSpanNotSuitableException.java" />
+        <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/util/Stack.java" />
+        <option value="$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java" />
         <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/ExpItem.java" />
         <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/VarAriExp.java" />
-        <option value="$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VariableSpanNotSuitableException.java" />
       </list>
     </option>
   </component>
@@ -170,7 +187,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -222,14 +239,6 @@
               <option name="myItemId" value="daoshengwanwu" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="calculator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -241,48 +250,14 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daoshengwanwu" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="calculator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="exception" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Calculator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Calculator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="daoshengwanwu" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="launcher" />
+              <option name="myItemId" value=".idea" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="RunDashboard">
@@ -549,23 +524,30 @@
       <option name="project" value="LOCAL" />
       <updated>1497260147245</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="空格替换掉制表符">
+      <created>1497260624432</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1497260624432</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32910052" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32910052" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32910052" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -591,7 +573,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="访问修饰符的修改" />
-    <option name="LAST_COMMIT_MESSAGE" value="访问修饰符的修改" />
+    <MESSAGE value="空格替换掉制表符" />
+    <option name="LAST_COMMIT_MESSAGE" value="空格替换掉制表符" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -602,6 +585,90 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/Calculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5632">
+          <caret line="194" column="0" lean-forward="false" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#calculate#0;class#Calculator#0" expanded="false" />
+            <element signature="method#calculate#1;class#Calculator#0" expanded="false" />
+            <element signature="method#calculateCurrentValue#0;class#Calculator#0" expanded="false" />
+            <element signature="method#makeOperate#0;class#Calculator#0" expanded="false" />
+            <element signature="class#ResultGenerator#0;class#Calculator#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/ExpItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="736">
+          <caret line="23" column="2" lean-forward="false" selection-start-line="23" selection-start-column="2" selection-end-line="23" selection-end-column="2" />
+          <folding>
+            <element signature="e#1567#1568#0" expanded="true" />
+            <element signature="e#1594#1595#0" expanded="true" />
+            <element signature="class#ItemType#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#isIdentifierAlreadyExist#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#Operator#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+            <element signature="e#3349#3350#0" expanded="true" />
+            <element signature="e#3422#3423#0" expanded="true" />
+            <element signature="e#3509#3510#0" expanded="true" />
+            <element signature="e#3582#3583#0" expanded="true" />
+            <element signature="e#13881#13882#0" expanded="true" />
+            <element signature="e#13930#13931#0" expanded="true" />
+            <element signature="e#15198#15199#0" expanded="true" />
+            <element signature="e#15247#15248#0" expanded="true" />
+            <element signature="e#15646#15647#0" expanded="true" />
+            <element signature="e#15695#15696#0" expanded="true" />
+            <element signature="e#16236#16237#0" expanded="true" />
+            <element signature="e#16285#16286#0" expanded="true" />
+            <element signature="e#16826#16827#0" expanded="true" />
+            <element signature="e#16875#16876#0" expanded="true" />
+            <element signature="e#17410#17411#0" expanded="true" />
+            <element signature="e#17459#17460#0" expanded="true" />
+            <element signature="e#19126#19127#0" expanded="true" />
+            <element signature="e#19174#19175#0" expanded="true" />
+            <element signature="e#21203#21204#0" expanded="true" />
+            <element signature="e#21269#21270#0" expanded="true" />
+            <element signature="method#newOperator#0;class#OperatorAssistant#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+            <element signature="class#Operand#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#getOperand#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#getConstant#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#Operand#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#Variable#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#nextValue#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+            <element signature="class#VariableAssistant#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/VarAriExp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6400">
+          <caret line="221" column="0" lean-forward="false" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#VarAriExp#0;class#VarAriExp#0" expanded="false" />
+            <element signature="e#4633#4634#0" expanded="true" />
+            <element signature="e#4657#4658#0" expanded="true" />
+            <element signature="e#4719#4720#0" expanded="true" />
+            <element signature="e#4753#4754#0" expanded="true" />
+            <element signature="method#ensureAriExp#0;class#VarAriExp#0" expanded="false" />
+            <element signature="method#analysisIdentifier#0;class#VarAriExp#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -679,14 +746,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/ConstantNotExistException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -778,21 +837,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VarIdentifierAlreadyExistException.java">
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VariableSpanNotSuitableException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        <state relative-caret-position="288">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -804,33 +853,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/util/Stack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/AriExp.java">
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VarIdentifierAlreadyExistException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/Calculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="194" column="0" lean-forward="false" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Calculator.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="10" column="9" lean-forward="true" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -840,25 +877,112 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/ExpItem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="23" column="2" lean-forward="true" selection-start-line="23" selection-start-column="2" selection-end-line="23" selection-end-column="2" />
+        <state relative-caret-position="33760">
+          <caret line="1408" column="15" lean-forward="false" selection-start-line="1408" selection-start-column="8" selection-end-line="1408" selection-end-column="15" />
+          <folding>
+            <element signature="e#1567#1568#0" expanded="true" />
+            <element signature="e#1594#1595#0" expanded="true" />
+            <element signature="class#ItemType#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#isIdentifierAlreadyExist#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#Operator#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+            <element signature="e#3349#3350#0" expanded="true" />
+            <element signature="e#3422#3423#0" expanded="true" />
+            <element signature="e#3509#3510#0" expanded="true" />
+            <element signature="e#3582#3583#0" expanded="true" />
+            <element signature="e#13881#13882#0" expanded="true" />
+            <element signature="e#13930#13931#0" expanded="true" />
+            <element signature="e#15198#15199#0" expanded="true" />
+            <element signature="e#15247#15248#0" expanded="true" />
+            <element signature="e#15646#15647#0" expanded="true" />
+            <element signature="e#15695#15696#0" expanded="true" />
+            <element signature="e#16236#16237#0" expanded="true" />
+            <element signature="e#16285#16286#0" expanded="true" />
+            <element signature="e#16826#16827#0" expanded="true" />
+            <element signature="e#16875#16876#0" expanded="true" />
+            <element signature="e#17410#17411#0" expanded="true" />
+            <element signature="e#17459#17460#0" expanded="true" />
+            <element signature="e#19126#19127#0" expanded="true" />
+            <element signature="e#19174#19175#0" expanded="true" />
+            <element signature="e#21203#21204#0" expanded="true" />
+            <element signature="e#21269#21270#0" expanded="true" />
+            <element signature="method#newOperator#0;class#OperatorAssistant#0;class#Operator#0;class#ExpItem#0" expanded="false" />
+            <element signature="class#Operand#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#getOperand#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#getConstant#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#Operand#0;class#Operand#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#Variable#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+            <element signature="method#nextValue#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+            <element signature="class#VariableAssistant#0;class#Variable#0;class#ExpItem#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/util/Stack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="704">
+          <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/ConstantNotExistException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/AriExp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding>
+            <element signature="e#120#121#0" expanded="true" />
+            <element signature="e#146#147#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/Calculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1024">
+          <caret line="155" column="4" lean-forward="true" selection-start-line="155" selection-start-column="4" selection-end-line="155" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#calculate#0;class#Calculator#0" expanded="false" />
+            <element signature="method#calculate#1;class#Calculator#0" expanded="false" />
+            <element signature="method#calculateCurrentValue#0;class#Calculator#0" expanded="false" />
+            <element signature="method#makeOperate#0;class#Calculator#0" expanded="false" />
+            <element signature="class#ResultGenerator#0;class#Calculator#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/VarAriExp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="42" column="21" lean-forward="true" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
-          <folding />
+        <state relative-caret-position="1984">
+          <caret line="221" column="0" lean-forward="true" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#VarAriExp#0;class#VarAriExp#0" expanded="false" />
+            <element signature="e#4633#4634#0" expanded="true" />
+            <element signature="e#4657#4658#0" expanded="true" />
+            <element signature="e#4719#4720#0" expanded="true" />
+            <element signature="e#4753#4754#0" expanded="true" />
+            <element signature="method#ensureAriExp#0;class#VarAriExp#0" expanded="false" />
+            <element signature="method#analysisIdentifier#0;class#VarAriExp#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/math_util/calculator/exception/VariableSpanNotSuitableException.java">
+    <entry file="file://$PROJECT_DIR$/src/com/daoshengwanwu/launcher/Launcher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
+          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

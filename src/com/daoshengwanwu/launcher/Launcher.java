@@ -31,5 +31,7 @@ public class Launcher {
 		expStr = "1 + 2 * 3 / 6";
         AriExp ariExp = new AriExp(expStr);
         System.out.println(calculator.calculate(ariExp));
+
+
 	}//main
 }//class_Launcher

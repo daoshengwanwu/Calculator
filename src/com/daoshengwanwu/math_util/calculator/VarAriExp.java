@@ -35,8 +35,8 @@ public class VarAriExp {
 		sOcSet.add("|");
 		
 	}//static
-	
-	
+
+
 	public VarAriExp(String expStr, VariableAssistant varAssist) {
 		mVarAssist = varAssist;
 		
@@ -159,6 +159,15 @@ public class VarAriExp {
 		mExpItems.add(Operator.getEndFlag());
 	}//con_VarAriExp
 
+	public VariableAssistant getVariableAssistant() {
+		return mVarAssist;
+	}//getVariableAssistant
+
+	@Override
+	public String toString() {
+		return mExpItems.toString();
+	}//toString
+
 	void ensureAriExp() {
 		if (mIsCertain) {
 			return;
@@ -189,15 +198,6 @@ public class VarAriExp {
 	List<ExpItem> getExpItemList() {
 		return mExpItems;
 	}//getExpItemList
-	
-	VariableAssistant getVariableAssistant() {
-		return mVarAssist;
-	}//getVariableAssistant
-	
-	@Override
-	public String toString() {
-		return mExpItems.toString();
-	}//toString
 	
 	private ExpItem analysisIdentifier(String itemStr) {
 		if (Operator.isIdentifierAlreadyExist(itemStr)) {
