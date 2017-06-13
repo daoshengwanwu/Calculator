@@ -14,6 +14,10 @@ import com.daoshengwanwu.math_util.calculator.exception.ResultErrorException;
 import com.daoshengwanwu.math_util.calculator.util.Stack;
 
 
+/**
+ * @author 白浩然
+ * 计算器类，外部通过该类来解析计算算术表达式
+ */
 public class Calculator {
     private Stack<Operand> mOperandStack = new Stack<>();
     private Stack<CertainOperator> mOperatorStack = new Stack<>();
@@ -136,25 +140,40 @@ public class Calculator {
         
         return mOperandStack.pop().getValue();
     }//calculateCurrentValue
-    
-    private void makeOperate() {        
+
+    /**
+     * 从运算符栈中弹出一个运算符，并进行相应的运算
+     */
+    private void makeOperate() {
+        //获取栈顶运算符
         CertainOperator operator = mOperatorStack.pop();
         
         if (!operator.isNeedOperate()) {
+            //如果该运算符是无需计算的，则直接返回
             return;
         }//if
         
-        int operandNum = operator.getDimension();
-        Operand[] operands = new Operand[operandNum];
-        
+        int operandNum = operator.getDimension(); //获取运算符需要的操作数个数
+        Operand[] operands = new Operand[operandNum]; //承载操作数的容器
+
+        //根据需要的操作数个数，依次从操作数栈中取出操作数放入operands数组中
         for (int i = 1; i <= operandNum; i++) {
             operands[operands.length - i] = mOperandStack.pop();
         }//for
-        
+
+        //最后再将运算结果放入操作数栈中
         mOperandStack.push(operator.operate(operands));
     }//makeOperate
-    
-    
+
+
+    /**
+     * 结果生成器类，该类可依次返回变量表达式的所有可能计算结果
+     * 例如：变量表达式为 x * y, 其中x区间为[0, 1], y区间为[1, 2], 且x, y跨度均为0.1
+     * 那么该ResultGenerator会依次返回当 x = 0, y = 0; x = 0.1, y = 0; ... x = 1, y = 0; x = 1, y = 0.1; ... x = 1, y = 1;
+     * 时对应的结果
+     * 第一次调用curValue()方法会返回变量表达式的第一个值，
+     * 之后每次调用nextValue()方法，会依次返回变量表达式的下一个值
+     */
     public static class ResultGenerator {
         private VarAriExp mVarAriExp;
         private Calculator mCalculator;
@@ -166,20 +185,36 @@ public class Calculator {
             mCalculator = new Calculator();
             mVarAssist = mVarAriExp.getVariableAssistant();
         }//con_ResultGenerator
-        
+
+        /**
+         * 获得当前结果
+         * @return 当前结果
+         */
         public double curValue() {
             return mCalculator.calculateCurrentValue(mVarAriExp);
         }//curValue
-        
+
+        /**
+         * 判断是否还有下一个结果
+         * @return true: 如果有下一个计算结果; false: 反之
+         */
         public boolean hasNext() {
             return null != mVarAssist && mVarAssist.hasNext();
         }//hasNext
-        
+
+        /**
+         * 计算出下一个结果并返回
+         * @return 下一个结果
+         */
         public double nextValue() {
             mVarAssist.nextValue();
             return mCalculator.calculateCurrentValue(mVarAriExp);
         }//nextValue
-        
+
+        /**
+         * 计算出所有结果，将之保存到List中，并返回
+         * @return 包含所有结果的List
+         */
         public List<Double> getResultList() {
             List<Double> resultList = new ArrayList<>();
             

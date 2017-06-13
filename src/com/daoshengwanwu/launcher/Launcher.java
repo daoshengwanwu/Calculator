@@ -18,19 +18,15 @@ public class Launcher {
                 Operand.getOperand(10), false,
                 Operand.getOperand(0.1));
 
-        String expStr = "lg(x^2 + 1)";
+        String expStr = "|0 - (1 + 2 * 3^4 + log(8)~64) - sin(pi/2)|";
         VarAriExp varAriExp = new VarAriExp(expStr, varAssist);
         ResultGenerator resultGenerator = calculator.calculate(varAriExp);
         
         long startTime = System.currentTimeMillis();
-        System.out.println(resultGenerator.getResultList());
+        System.out.println(calculator.calculate(expStr));
         long endTime = System.currentTimeMillis();
         
         System.out.println("耗费时间：" + (endTime - startTime) + "毫秒");
-
-        expStr = "1 + 2 * 3 / 6";
-        AriExp ariExp = new AriExp(expStr);
-        System.out.println(calculator.calculate(ariExp));
 
 
     }//main
