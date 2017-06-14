@@ -42,19 +42,29 @@ public class Calculator {
     public ResultGenerator calculate(VarAriExp varAriExp) {
         return new ResultGenerator(varAriExp);
     }//calculate
-    
+
+    /**
+     * 计算出表达式的当前值，当前值就是指，当我在解析表达式的时候如果遇到变量类型的item
+     * 则直接将该变量item.curValue()压入栈中
+     * @param varAriExp 要计算的表达式
+     * @return 计算结果
+     */
     private double calculateCurrentValue(VarAriExp varAriExp) {
         //每次计算前清空运算符栈和操作数栈
         mOperandStack.clear();
         mOperatorStack.clear();
-        
-        //如果表达式元素不都是确定的，则使之确定
+
+        /*
+         * 如果表达式元素不都是确定的，则使之确定
+         * 比如，如果表达式中包含了'-'或者'|'则一开始，解析出来的item是UnCertainOperator(不确定类型的运算符)
+         * 当我调用了ensureAriExp之后，会根据规则确定出其对应的CertainOperator(确定类型的运算符)
+         */
         if (!varAriExp.isCertain()) {
             varAriExp.ensureAriExp();
         }//if
         
         double curValue;
-        int curIndex = 0;
+        int curIndex = 0; //当前在处理的item的索引，从0开始
         int curLeftPrior;
         int topRightPrior;
         ExpItem curItem;
