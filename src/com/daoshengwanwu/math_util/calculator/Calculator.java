@@ -70,6 +70,7 @@ public class Calculator {
         ExpItem curItem;
         CertainOperator curOperator;
         CertainOperator topOperator;
+
         List<ExpItem> expItems = varAriExp.getExpItemList();
         while (curIndex < expItems.size()) {
             curItem = expItems.get(curIndex);
@@ -92,7 +93,7 @@ public class Calculator {
                         topOperator = mOperatorStack.getTop();
                         switch (topOperator.getCertainOperatorType()) {
                         case NORMAL: 
-                        case CLOSE: {
+                        case CLOSE: { //如果发现CLOSE性质
                             if (topOperator.isRightDirPriorExist()) {
                                 curLeftPrior = curOperator.getLeftDirPriority();
                                 topRightPrior = topOperator.getRightDirPriority();
@@ -112,7 +113,6 @@ public class Calculator {
                             curIndex++;
                         } break;
                         }//switch-case
-                        
                     } else {
                         mOperatorStack.push(curOperator);
                         curIndex++;
@@ -144,7 +144,7 @@ public class Calculator {
             }//switch-case
         } //while
         
-        if (mOperandStack.isEmpty()) {
+        if (mOperandStack.size() != 1 || !mOperatorStack.isEmpty()) {
             throw new ResultErrorException();
         }//if
         
@@ -218,7 +218,7 @@ public class Calculator {
          */
         public double nextValue() {
             mVarAssist.nextValue();
-            return mCalculator.calculateCurrentValue(mVarAriExp);
+            return curValue();
         }//nextValue
 
         /**
