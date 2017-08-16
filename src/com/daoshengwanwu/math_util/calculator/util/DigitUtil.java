@@ -12,6 +12,9 @@ public class DigitUtil {
      * @return 被规范化后的值, 被规范化后的double值可以直接通过 "=="运算符来判等
      */
     public static double reserveSignificantDigits(double value, int significantDigits) {
+        double absValue = Math.abs(value);
+        double signMinValue = getMinimumSpan(0, significantDigits);
+
         // 计算出整数的位数integerFigures
         int integerFigures = getIntegerFigures(value);
         if (integerFigures > significantDigits) {
@@ -24,8 +27,12 @@ public class DigitUtil {
         
         // 根据decimalFigures对value进行四舍五入并返回
         long auxiliary = (long)Math.pow(10, decimalFigures);
-        
-        return (double)Math.round(value * auxiliary) / auxiliary;
+
+        double a = value * auxiliary;
+        double b = (double)Math.round(a);
+        double c = b / auxiliary;
+
+        return c;
     }//reserveSignificantDigits
 
     /**

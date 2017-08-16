@@ -44,11 +44,6 @@ public class Calculator {
         mOperandStack.clear();
         mOperatorStack.clear();
         
-        //如果表达式元素不都是确定的，则使之确定
-        if (!varAriExp.isCertain()) {
-            varAriExp.ensureAriExp();
-        }//if
-        
         double curValue;
         int curIndex = 0;
         int curLeftPrior;
