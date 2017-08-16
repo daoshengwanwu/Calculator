@@ -3,7 +3,6 @@ package com.daoshengwanwu.launcher;
 
 import com.daoshengwanwu.math_util.calculator.AriExp;
 import com.daoshengwanwu.math_util.calculator.Calculator;
-import com.daoshengwanwu.math_util.calculator.Calculator.ResultGenerator;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operand;
 import com.daoshengwanwu.math_util.calculator.ExpItem.Variable.VariableAssistant;
 import com.daoshengwanwu.math_util.calculator.VarAriExp;
@@ -48,13 +47,12 @@ public class Launcher {
         VarAriExp varAriExp = new VarAriExp(expStr, varAssist);
 
         //calculator.calculate(expStr, varAssist); 这种方式也是可以的
-        ResultGenerator result = calculator.calculate(varAriExp);
+        Calculator.ResultGenerator result = calculator.calculate(varAriExp);
 
         //我们来把所有结果输出出来
         System.out.println(result.curValue());
         while (result.hasNext()) {
             System.out.println(result.nextValue());
         }
-
-    }//main
+    }
 }//class_Launcher
