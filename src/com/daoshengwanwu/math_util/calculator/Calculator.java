@@ -53,15 +53,6 @@ public class Calculator {
         //每次计算前清空运算符栈和操作数栈
         mOperandStack.clear();
         mOperatorStack.clear();
-
-        /*
-         * 如果表达式元素不都是确定的，则使之确定
-         * 比如，如果表达式中包含了'-'或者'|'则一开始，解析出来的item是UnCertainOperator(不确定类型的运算符)
-         * 当我调用了ensureAriExp之后，会根据规则确定出其对应的CertainOperator(确定类型的运算符)
-         */
-        if (!varAriExp.isCertain()) {
-            varAriExp.ensureAriExp();
-        }//if
         
         double curValue;
         int curIndex = 0; //当前在处理的item的索引，从0开始

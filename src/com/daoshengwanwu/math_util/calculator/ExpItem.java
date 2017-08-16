@@ -21,11 +21,6 @@ import com.daoshengwanwu.math_util.calculator.exception.VariableSpanNotSuitableE
 import com.daoshengwanwu.math_util.calculator.util.DigitUtil;
 
 
-/*
- * 该类的对象为构成表达式的项，是构成AriExp以及VarAriExp的基本单位
- * 这里没有使用public修饰该类，因为其他包的类不需要引用
- * 到该类的对象
- */
 public abstract class ExpItem {
     //该项的类型，取值分别有：OPERATOR(运算符)、OPERAND(操作数)、VARIABLE(变量)
     private final ItemType mItemType;
