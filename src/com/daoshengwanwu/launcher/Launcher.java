@@ -55,7 +55,4 @@ public class Launcher {
             System.out.println(result.nextValue());
         }
     }
-
-
-
 }//class_Launcher
