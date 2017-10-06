@@ -6,26 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.CertainOperator.CertainOperatorType;
-import com.daoshengwanwu.math_util.calculator.exception.ConstantNotExistException;
-import com.daoshengwanwu.math_util.calculator.exception.NoNextValueException;
-import com.daoshengwanwu.math_util.calculator.exception.OperandNumException;
-import com.daoshengwanwu.math_util.calculator.exception.OperandOutOfBoundsException;
-import com.daoshengwanwu.math_util.calculator.exception.OperatorNotExistException;
-import com.daoshengwanwu.math_util.calculator.exception.ShouldNotOperateException;
-import com.daoshengwanwu.math_util.calculator.exception.SpecDirPriorNotExistException;
-import com.daoshengwanwu.math_util.calculator.exception.VarAssistHasNoNextValueException;
-import com.daoshengwanwu.math_util.calculator.exception.VarIdentifierAlreadyExistException;
-import com.daoshengwanwu.math_util.calculator.exception.VariableDomainErrorException;
-import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistException;
-import com.daoshengwanwu.math_util.calculator.exception.VariableSpanNotSuitableException;
+import com.daoshengwanwu.math_util.calculator.exception.*;
 import com.daoshengwanwu.math_util.calculator.util.DigitUtil;
 
 
-/*
- * 该类的对象为构成表达式的项，是构成AriExp以及VarAriExp的基本单位
- * 这里没有使用public修饰该类，因为其他包的类不需要引用
- * 到该类的对象
- */
 public abstract class ExpItem {
     //该项的类型，取值分别有：OPERATOR(运算符)、OPERAND(操作数)、VARIABLE(变量)
     private final ItemType mItemType;
@@ -1260,7 +1244,12 @@ public abstract class ExpItem {
             }//getOperator
             
             private static Operator getOperator(int operatorFlag) {
-                return sFlagOperatorMap.computeIfAbsent(operatorFlag, OperatorAssistant::newOperator);
+                Operator operator = sFlagOperatorMap.get(operatorFlag);
+                if (null == operator) {
+                    operator = newOperator(operatorFlag);
+                    sFlagOperatorMap.put(operatorFlag, operator);
+                }
+                return operator;
             }//getOperator
             
             private static boolean isIdentifierAlreadyExist(String identifierStr) {
@@ -1279,8 +1268,8 @@ public abstract class ExpItem {
         
         static {
             //初始化常量表
-            sConstantsMap.put("pi", new Operand(Math.PI));
-            sConstantsMap.put("e", new Operand(Math.E));
+            sConstantsMap.put("pi", new Constant_PI());
+            sConstantsMap.put("e", new Constant_E());
             
         }//static
         
@@ -1289,7 +1278,7 @@ public abstract class ExpItem {
         
         
         public static Operand getOperand(String operandStr) {
-            return new Operand(Double.parseDouble(operandStr));
+            return getOperand(Double.parseDouble(operandStr));
         }//getOperand
         
         public static Operand getOperand(double operandValue) {
@@ -1327,13 +1316,36 @@ public abstract class ExpItem {
         public boolean equals(Object obj) {
             return obj instanceof Operand && getValue() == ((Operand) obj).getValue();
         }//equals
+
+
+        private static class Constant_PI extends Operand {
+            private Constant_PI() {
+                super(0); //对于常量来说这个mValue无用，默认置为0
+            }
+
+            @Override
+            public double getValue() {
+                return Math.PI;
+            }
+        }
+
+        private static class Constant_E extends Operand {
+            private Constant_E() {
+                super(0); //对于常量来说这个mValue无用，默认置为0
+            }
+
+            @Override
+            public double getValue() {
+                return Math.E;
+            }
+        }
     }//class_Operand
     
     /*
      * 变量类
      */
     public static class Variable extends ExpItem {
-        private String mFlagStr; //变量的字符串标识，只能是
+        private String mFlagStr;
         private double mUpperLimit;
         private double mLowerLimit;
         private double mSpan;
@@ -1354,7 +1366,13 @@ public abstract class ExpItem {
             }//if
             
             //变量的最小跨度，以上限为标准
-            Operand minimuxSpan = new Operand(DigitUtil.getMinimumSpan(upperLimit.getValue(), Operand.SIGNIFICANCE_DIGIT));
+            if (span.getValue() < 0) {
+                throw new VariableSpanMustBePositiveException();
+            }
+            Operand standardRef = Math.abs(lowerLimit.getValue()) >
+                    Math.abs(upperLimit.getValue()) ? lowerLimit : upperLimit;
+            Operand minimuxSpan = new Operand(DigitUtil.getMinimumSpan(
+                    standardRef.getValue(), Operand.SIGNIFICANCE_DIGIT));
             if (span.getValue() < minimuxSpan.getValue()) {
                 span = minimuxSpan;
             }

@@ -18,13 +18,13 @@ public class DigitUtil {
             value /= (long)Math.pow(10, integerFigures - significantDigits);
             integerFigures = significantDigits;
         }
-        
+
         // 计算出应有的小数位数：decimalFigures = significantDigit - integerFigures
         int decimalFigures = significantDigits - integerFigures;
-        
+
         // 根据decimalFigures对value进行四舍五入并返回
         long auxiliary = (long)Math.pow(10, decimalFigures);
-        
+
         return (double)Math.round(value * auxiliary) / auxiliary;
     }//reserveSignificantDigits
 
@@ -35,7 +35,7 @@ public class DigitUtil {
      */
     private static int getIntegerFigures(double value) {
         int integerFigures = 0;
-        long lValue = (long)value;
+        long lValue = Math.abs((long)value);
         
         while (lValue >= 1000) {
             integerFigures += 4;
