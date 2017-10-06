@@ -61,8 +61,7 @@ public class VarAriExp {
                 itemStr = expStr.substring(itemStartIndex, curIndex);
                 mExpItems.add(analysisOperand(itemStr));
             } else if (isSpecialIdentifierOpen) {
-                if (isSpecialIdentifierPartCharacter(curChar) &&
-                        !sOcSet.contains(curChar)) {
+                if (isSpecialIdentifierPartCharacter(curChar) && !sOcSet.contains(curChar)) {
                     continue;
                 }
 
@@ -104,7 +103,12 @@ public class VarAriExp {
 
     @Override
     public String toString() {
-        return mExpItems.toString();
+        StringBuilder resultBuilder = new StringBuilder();
+        for (int i = 1; i < mExpItems.size() - 1; i++) {
+            resultBuilder.append(mExpItems.get(i));
+        }
+
+        return resultBuilder.toString();
     }//toString
     
     List<ExpItem> getExpItemList() {
