@@ -30,6 +30,22 @@ public class DigitUtil {
 
     /**
      * @author 白浩然
+     * @param value 要计算最小跨度的值
+     * @param significantDigits 有效位数
+     * @return 在指定有效位数下的能对value产生影响的最小跨度值
+     */
+    public static double getMinimumSpan(double value, int significantDigits) {
+        //得到value的整数位数
+        int integerFigures = getIntegerFigures(value);
+
+        //得到对应有效数字位数下的最多小数位数
+        int maxDecimalFigures = significantDigits - integerFigures;
+
+        return Math.pow(10, 0 - maxDecimalFigures);
+    }//getMinimumSpan
+
+    /**
+     * @author 白浩然
      * @param value 要计算整数位数的数
      * @return value 的整数位数
      */
@@ -49,20 +65,4 @@ public class DigitUtil {
         
         return integerFigures;
     }//getIntegerFigures
-    
-    /**
-     * @author 白浩然
-     * @param value 要计算最小跨度的值
-     * @param significantDigits 有效位数
-     * @return 在指定有效位数下的能对value产生影响的最小跨度值
-     */
-    public static double getMinimumSpan(double value, int significantDigits) {
-        //得到value的整数位数
-        int integerFigures = getIntegerFigures(value);
-        
-        //得到对应有效数字位数下的最多小数位数
-        int maxDecimalFigures = significantDigits - integerFigures;
-        
-        return Math.pow(10, 0 - maxDecimalFigures);
-    }//getMinimumSpan
 }//class_DigitUtil
