@@ -46,7 +46,6 @@ abstract class UncertainOperator extends Operator {
     static class VerticalLine extends UncertainOperator {
         VerticalLine(String operatorStr) {
             super(operatorStr);
-
         }//con_VerticalLine
 
         @Override

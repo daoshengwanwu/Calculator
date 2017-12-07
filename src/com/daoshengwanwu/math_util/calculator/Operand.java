@@ -45,7 +45,7 @@ class Operand extends ExpItem {
         throw new ConstantNotExistException(constantStr);
     }//getConstant
 
-    Operand(double value) {
+    private Operand(double value) {
         super(ItemType.OPERAND);
 
         mValue = DigitUtil.reserveSignificantDigits(value, SIGNIFICANCE_DIGIT);

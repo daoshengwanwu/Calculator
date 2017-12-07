@@ -25,13 +25,12 @@ class Variable extends ExpItem {
             throw new VariableDomainErrorException();
         }//if
 
-        //变量的最小跨度，以上限为标准
         if (span.getValue() < 0) {
             throw new VariableSpanMustBePositiveException();
         }
         Operand standardRef = Math.abs(lowerLimit.getValue()) >
                 Math.abs(upperLimit.getValue()) ? lowerLimit : upperLimit;
-        Operand minimuxSpan = new Operand(DigitUtil.getMinimumSpan(
+        Operand minimuxSpan = Operand.getOperand(DigitUtil.getMinimumSpan(
                 standardRef.getValue(), Operand.SIGNIFICANCE_DIGIT));
         if (span.getValue() < minimuxSpan.getValue()) {
             span = minimuxSpan;
@@ -40,10 +39,10 @@ class Variable extends ExpItem {
         mSpan = span.getValue();
 
         if (isLowerOpen) {
-            lowerLimit = new Operand(lowerLimit.getValue() + mSpan);
+            lowerLimit = Operand.getOperand(lowerLimit.getValue() + mSpan);
         } //if
         if (isUpperOpen) {
-            upperLimit = new Operand(upperLimit.getValue() - mSpan);
+            upperLimit = Operand.getOperand(upperLimit.getValue() - mSpan);
         }//if
 
         if (lowerLimit.getValue() > upperLimit.getValue()) {

@@ -11,6 +11,8 @@ public class Launcher {
     public static void main(String[] args) { //Calculator类使用示例
         Calculator calculator = new Calculator();
 
+        System.out.println(Math.log(-1));
+
         //待计算的表达式字符串（不含有变量的纯数学表达式）
         String expStr = "11^2 + 5.9^2";
         AriExp ariExp = new AriExp(expStr); //将表达式字符串封装为AriExp对象

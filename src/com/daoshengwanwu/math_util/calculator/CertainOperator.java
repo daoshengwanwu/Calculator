@@ -373,7 +373,7 @@ abstract class CertainOperator extends Operator {
             double leftOperand = operands[0].getValue();
             double rightOperand = operands[1].getValue();
 
-            return new Operand(leftOperand + rightOperand);
+            return Operand.getOperand(leftOperand + rightOperand);
         }//operate
     }//class_Add
 
@@ -392,7 +392,7 @@ abstract class CertainOperator extends Operator {
             double leftOperand = operands[0].getValue();
             double rightOperand = operands[1].getValue();
 
-            return new Operand(leftOperand - rightOperand);
+            return Operand.getOperand(leftOperand - rightOperand);
         }//operate
     }//class_Sub
 
@@ -411,7 +411,7 @@ abstract class CertainOperator extends Operator {
             double leftOperand = operands[0].getValue();
             double rightOperand = operands[1].getValue();
 
-            return new Operand(leftOperand * rightOperand);
+            return Operand.getOperand(leftOperand * rightOperand);
         }//operate
     }//class_Mul
 
@@ -430,7 +430,7 @@ abstract class CertainOperator extends Operator {
             double leftOperand = operands[0].getValue();
             double rightOperand = operands[1].getValue();
 
-            return new Operand(leftOperand / rightOperand);
+            return Operand.getOperand(leftOperand / rightOperand);
         }//operate
     }//class_Div
 
@@ -449,7 +449,7 @@ abstract class CertainOperator extends Operator {
             double leftOperand = operands[0].getValue();
             double rightOperand = operands[1].getValue();
 
-            return new Operand(leftOperand % rightOperand);
+            return Operand.getOperand(leftOperand % rightOperand);
         }//operate
     }//class_Mod
 
@@ -468,7 +468,7 @@ abstract class CertainOperator extends Operator {
             double leftOperand = operands[0].getValue();
             double rightOperand = operands[1].getValue();
 
-            return new Operand(Math.pow(leftOperand, rightOperand));
+            return Operand.getOperand(Math.pow(leftOperand, rightOperand));
         }//operate
     }//class_Pow
 
@@ -486,7 +486,7 @@ abstract class CertainOperator extends Operator {
 
             double operand = operands[0].getValue();
 
-            return new Operand(0 - operand);
+            return Operand.getOperand(0 - operand);
         }//operate
     }//class_Negate
 
@@ -504,7 +504,7 @@ abstract class CertainOperator extends Operator {
 
             double operand = operands[0].getValue();
 
-            return new Operand(Math.sin(operand));
+            return Operand.getOperand(Math.sin(operand));
         }//operate
     }//class_Sin
 
@@ -522,7 +522,7 @@ abstract class CertainOperator extends Operator {
 
             double operand = operands[0].getValue();
 
-            return new Operand(Math.cos(operand));
+            return Operand.getOperand(Math.cos(operand));
         }//operate
     }//class_Cos
 
@@ -540,7 +540,7 @@ abstract class CertainOperator extends Operator {
 
             double operand = operands[0].getValue();
 
-            return new Operand(Math.tan(operand));
+            return Operand.getOperand(Math.tan(operand));
         }//operate
     }//class_Tan
 
@@ -561,7 +561,7 @@ abstract class CertainOperator extends Operator {
                 throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
             }//if
 
-            return new Operand(Math.asin(operand));
+            return Operand.getOperand(Math.asin(operand));
         }//operate
     }//class_ASin
 
@@ -582,7 +582,7 @@ abstract class CertainOperator extends Operator {
                 throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
             }//if
 
-            return new Operand(Math.acos(operand));
+            return Operand.getOperand(Math.acos(operand));
         }//operate
     }//class_ACos
 
@@ -603,7 +603,7 @@ abstract class CertainOperator extends Operator {
                 throw new OperandOutOfBoundsException(this.getOperatorStr(), "[-1, 1]", operand);
             }//if
 
-            return new Operand(Math.atan(operand));
+            return Operand.getOperand(Math.atan(operand));
         }//operate
     }//class_ATan
 
@@ -624,7 +624,7 @@ abstract class CertainOperator extends Operator {
                 throw new OperandOutOfBoundsException(getOperatorStr(), "(0, +∞)", operand);
             }//if
 
-            return new Operand(Math.log1p(operand - 1)); //Math.log1p(x)返回值为：ln(1 + x);
+            return Operand.getOperand(Math.log1p(operand - 1)); //Math.log1p(x)返回值为：ln(1 + x);
         }//operate
     }//class_Ln
 
@@ -645,7 +645,7 @@ abstract class CertainOperator extends Operator {
                 throw new OperandOutOfBoundsException(getOperatorStr(), "(0, +∞)", operand);
             }//if
 
-            return new Operand(Math.log10(operand));
+            return Operand.getOperand(Math.log10(operand));
         }//operate
     }//class_Lg
 
@@ -666,7 +666,7 @@ abstract class CertainOperator extends Operator {
                 throw new OperandOutOfBoundsException(getOperatorStr(), "[0, +∞)", operand);
             }//if
 
-            return new Operand(Math.sqrt(operand));
+            return Operand.getOperand(Math.sqrt(operand));
         }//operate
     }//class_Sqrt
 
@@ -684,7 +684,7 @@ abstract class CertainOperator extends Operator {
 
             double operand = operands[0].getValue();
 
-            return new Operand(fact(operand));
+            return Operand.getOperand(fact(operand));
         }//operate
 
         private long fact(double operand) {
@@ -692,7 +692,7 @@ abstract class CertainOperator extends Operator {
                 throw new OperandOutOfBoundsException(getOperatorStr(), "非负整数", operand);
             }//if
 
-            if (!new Operand(operand - (int)operand).equals(new Operand(0))) {
+            if (!Operand.getOperand(operand - (int)operand).equals(Operand.getOperand(0))) {
                 throw new OperandOutOfBoundsException(getOperatorStr(), "非负整数", operand);
             }//if
 
@@ -724,7 +724,7 @@ abstract class CertainOperator extends Operator {
 
             double operand = operands[0].getValue();
 
-            return new Operand(Math.abs(operand));
+            return Operand.getOperand(Math.abs(operand));
         }//operate
 
         @Override
@@ -825,7 +825,7 @@ abstract class CertainOperator extends Operator {
                 throw new OperandOutOfBoundsException(getOperatorStr(), "logx~y: 中的y的取值应该大于0", rightOperand);
             }//if
 
-            return new Operand(Math.log(rightOperand) / Math.log(leftOperand));
+            return Operand.getOperand(Math.log(rightOperand) / Math.log(leftOperand));
         }//operate
 
         @Override

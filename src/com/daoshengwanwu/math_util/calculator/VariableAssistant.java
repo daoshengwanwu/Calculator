@@ -15,8 +15,10 @@ public class VariableAssistant {
 
     public VariableAssistant addVariable(String flagStr, double lowerLimit, boolean isLowerOpen
             , double upperLimit, boolean isUpperOpen, double span) {
-        if (hasVariable(flagStr) || Operand.hasConstant(flagStr)
-                || OperatorAssistant.isIdentifierAlreadyExist(flagStr)) {
+
+        if (OperatorAssistant.isIdentifierAlreadyExist(flagStr) ||
+                Operand.hasConstant(flagStr) || hasVariable(flagStr)) {
+
             throw new VarIdentifierAlreadyExistException();
         }//if
 
@@ -47,9 +49,8 @@ public class VariableAssistant {
     }//hasVariable
 
     public boolean hasNext() {
-        for (String varStr : mVariablesMap.keySet()) {
-            Variable var = mVariablesMap.get(varStr);
-            if (var.hasNext()) {
+        for (Variable variable : mVariablesMap.values()) {
+            if (variable.hasNext()) {
                 return true;
             }//if
         }//for
@@ -58,10 +59,9 @@ public class VariableAssistant {
     }//hasNext
 
     public void nextValue() {
-        for (String varStr : mVariablesMap.keySet()) {
-            Variable var = mVariablesMap.get(varStr);
-            if (var.hasNext()) {
-                var.nextValue();
+        for (Variable variable : mVariablesMap.values()) {
+            if (variable.hasNext()) {
+                variable.nextValue();
                 return;
             }//if
         }//for
