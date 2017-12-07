@@ -51,9 +51,6 @@ abstract class CertainOperator extends Operator {
     //通过该方法判断对于本运算符是否需要进行运算
     abstract boolean isNeedOperate();
 
-    //通过该方法判断对于本运算符是否需要入栈
-    abstract boolean isNeedPush();
-
     //通过该方法获得本运算符的id
     abstract int getId();
 
@@ -71,7 +68,6 @@ abstract class CertainOperator extends Operator {
      */
     static abstract class NormalOperator extends CertainOperator {
         private static final CertainOperatorType OPERATOR_TYPE = CertainOperatorType.NORMAL;
-        private static final boolean IS_NEED_PUSH = true;
         private static final boolean IS_NEED_OPERATE = true;
         private static final int NORMAL_OPERATOR_ID = -1;
 
@@ -84,11 +80,6 @@ abstract class CertainOperator extends Operator {
         CertainOperatorType getCertainOperatorType() {
             return OPERATOR_TYPE;
         }//getOperatorType
-
-        @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
 
         @Override
         boolean isNeedOperate() {
@@ -106,9 +97,10 @@ abstract class CertainOperator extends Operator {
      */
     static abstract class OpenOperator extends CertainOperator {
         private static final CertainOperatorType OPERATOR_TYPE = CertainOperatorType.OPEN;
-        private static final boolean IS_NEED_PUSH = true;
+        private static final boolean IS_NEED_OPERATE = false;
         private static final boolean IS_LEFT_DIR_PRIORITY_EXIST = false;
         private static final boolean IS_RIGHT_DIR_PRIORITY_EXIST = false;
+        private static final int DIMENSION = 0;
 
         private int mId;
 
@@ -130,9 +122,9 @@ abstract class CertainOperator extends Operator {
         }//getId
 
         @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
+        boolean isNeedOperate() {
+            return IS_NEED_OPERATE;
+        }//isNeedOperate
 
         @Override
         boolean isLeftDirPriorExist() {
@@ -153,6 +145,16 @@ abstract class CertainOperator extends Operator {
         int getRightDirPriority() {
             throw new SpecDirPriorNotExistException(getOperatorStr(), "右");
         }//getRightDirPriority
+
+        @Override
+        int getDimension() {
+            return DIMENSION;
+        }//getDimension
+
+        @Override
+        Operand operate(Operand[] operands) {
+            throw new ShouldNotOperateException(getOperatorStr());
+        }//operate
     }//class_OpenOperator
 
     /*
@@ -161,6 +163,10 @@ abstract class CertainOperator extends Operator {
     static abstract class CloseOperator extends CertainOperator {
         private static final CertainOperatorType OPERATOR_TYPE = CertainOperatorType.CLOSE;
         private static final boolean IS_LEFT_DIR_PRIORITY_EXIST = false;
+        private static final boolean IS_RIGHT_DIR_PRIORITY_EXIST = false;
+        private static final boolean IS_NEED_PUSH = false;
+        private static final boolean IS_NEED_OPERATE = false;
+        private static final int DIMENSION = 0;
 
         private int mId;
 
@@ -170,6 +176,10 @@ abstract class CertainOperator extends Operator {
 
             mId = id;
         }//con_CloseOperator
+
+        boolean isNeedPush() {
+            return IS_NEED_PUSH;
+        }//isNeedPush
 
         @Override
         CertainOperatorType getCertainOperatorType() {
@@ -190,6 +200,31 @@ abstract class CertainOperator extends Operator {
         int getLeftDirPriority() {
             throw new SpecDirPriorNotExistException(getOperatorStr(), "左");
         }//getLeftDirPriority
+
+        @Override
+        boolean isRightDirPriorExist() {
+            return IS_RIGHT_DIR_PRIORITY_EXIST;
+        }//isRightDirPriorExist
+
+        @Override
+        int getRightDirPriority() {
+            throw new SpecDirPriorNotExistException(getOperatorStr(), "左");
+        }//getRightDirPriority
+
+        @Override
+        boolean isNeedOperate() {
+            return IS_NEED_OPERATE;
+        }//isNeedOperate
+
+        @Override
+        int getDimension() {
+            return DIMENSION;
+        }//getDimension
+
+        @Override
+        Operand operate(Operand[] operands) {
+            throw new ShouldNotOperateException(getOperatorStr());
+        }//operate
     }//class_CloseOperator
 
     /*
@@ -676,7 +711,6 @@ abstract class CertainOperator extends Operator {
      */
     static class LeftAbs extends OpenOperator {
         private static final int LOG_START_DIMENSION = 1;
-        private static final boolean IS_NEED_PUSH = false;
         private static final boolean IS_NEED_OPERATE = true;
 
 
@@ -702,204 +736,61 @@ abstract class CertainOperator extends Operator {
         boolean isNeedOperate() {
             return IS_NEED_OPERATE;
         }//isNeedOperate
-
-        @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
     }//LeftAbs
 
     /*
      * 左括号
      */
     static class LeftBrackets extends OpenOperator {
-        private static final int LEFT_BRACKETS_DIMENSION = 0;
-        private static final boolean IS_NEED_PUSH = false;
-        private static final boolean IS_NEED_OPERATE = false;
-
-
         LeftBrackets(String operatorStr, int id) {
             super(operatorStr, id);
         }//con_LeftBrackets
-
-        @Override
-        Operand operate(Operand[] operands) {
-            throw new ShouldNotOperateException(getOperatorStr());
-        }//operate
-
-        @Override
-        int getDimension() {
-            return LEFT_BRACKETS_DIMENSION;
-        }//getDimension
-
-        @Override
-        boolean isNeedOperate() {
-            return IS_NEED_OPERATE;
-        }//isNeedOperate
-
-        @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
     }//LeftBrackets
 
     /*
      * log开始运算符（log）
      */
     static class LogStart extends OpenOperator {
-        private static final int LOG_START_DIMENSION = 0;
-        private static final boolean IS_NEED_PUSH = false;
-        private static final boolean IS_NEED_OPERATE = false;
-
-
         LogStart(String operatorStr, int id) {
             super(operatorStr, id);
         }//con_LogStart
-
-        @Override
-        Operand operate(Operand[] operands) {
-            throw new ShouldNotOperateException(getOperatorStr());
-        }//operate
-
-        @Override
-        int getDimension() {
-            return LOG_START_DIMENSION;
-        }//getDimension
-
-        @Override
-        boolean isNeedOperate() {
-            return IS_NEED_OPERATE;
-        }//isNeedOperate
-
-        @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
     }//class_LogStart
 
     /*
      * 表达式开始标记
      */
     static class StartFlag extends OpenOperator {
-        private static final int FLAG_END_DIMENSION = 0;
-        private static final boolean IS_NEED_PUSH = false;
-        private static final boolean IS_NEED_OPERATE = false;
-
-
         StartFlag(String operatorStr, int id) {
             super(operatorStr, id);
         }//con_StartFlag
-
-        @Override
-        Operand operate(Operand[] operands) {
-            throw new ShouldNotOperateException(getOperatorStr());
-        }//operate
-
-        @Override
-        int getDimension() {
-            return FLAG_END_DIMENSION;
-        }//getDimension
-
-        @Override
-        boolean isNeedOperate() {
-            return IS_NEED_OPERATE;
-        }//isNeedOperate
-
-        @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
     }//class_StartFlag
 
     /*
      * 右绝对值
      */
     static class RightAbs extends CloseOperator {
-        private static final int RIGHT_ABS_DIMENSION = 0;
-        private static final boolean IS_NEED_PUSH = false;
-        private static final boolean IS_NEED_OPERATE = false;
-        private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
-
-
         RightAbs(String operatorStr, int id) {
             super(operatorStr, id);
         }//con_RightAbs
-
-        @Override
-        Operand operate(Operand[] operands) {
-            throw new ShouldNotOperateException(getOperatorStr());
-        }//operate
-
-        @Override
-        int getDimension() {
-            return RIGHT_ABS_DIMENSION;
-        }//getDimension
-
-        @Override
-        boolean isRightDirPriorExist() {
-            return IS_RIGHT_DIR_PRIOR_EXIST;
-        }//isRightDirPriorExist
-
-        @Override
-        boolean isNeedOperate() {
-            return IS_NEED_OPERATE;
-        }//isNeedOperate
-
-        @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
-
-        @Override
-        int getRightDirPriority() {
-            throw new SpecDirPriorNotExistException(getOperatorStr(), "右");
-        }//getRightDirPriority
     }//class_RightAbs
 
     /*
      * 右括号
      */
     static class RightBrackets extends CloseOperator {
-        private static final int RIGHT_BRACKETS_DIMENSION = 0;
-        private static final boolean IS_NEED_PUSH = false;
-        private static final boolean IS_NEED_OPERATE = false;
-        private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
-
-
         RightBrackets(String operatorStr, int id) {
             super(operatorStr, id);
         }//con_RightBrackets
-
-        @Override
-        Operand operate(Operand[] operands) {
-            throw new ShouldNotOperateException(getOperatorStr());
-        }//operate
-
-        @Override
-        int getDimension() {
-            return RIGHT_BRACKETS_DIMENSION;
-        }//getDimension
-
-        @Override
-        boolean isRightDirPriorExist() {
-            return IS_RIGHT_DIR_PRIOR_EXIST;
-        }//isRightDirPriorExist
-
-        @Override
-        boolean isNeedOperate() {
-            return IS_NEED_OPERATE;
-        }//isNeedOperate
-
-        @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
-
-        @Override
-        int getRightDirPriority() {
-            throw new SpecDirPriorNotExistException(getOperatorStr(), "右");
-        }//getRightDirPriority
     }//RightBrackets
+
+    /*
+     * 表达式结束标记
+     */
+    static class EndFlag extends CloseOperator {
+        EndFlag(String operatorStr, int id) {
+            super(operatorStr, id);
+        }//con_EndFlag
+    }//class_EndFlag
 
     /*
      * log运算符结束运算符（~）
@@ -962,49 +853,4 @@ abstract class CertainOperator extends Operator {
             return mRightPrior;
         }//getRightDirPriority
     }//class_LogEnd
-
-    /*
-     * 表达式结束标记
-     */
-    static class EndFlag extends CloseOperator {
-        private static final int FLAG_END_DIMENSION = 0;
-        private static final boolean IS_NEED_PUSH = false;
-        private static final boolean IS_NEED_OPERATE = false;
-        private static final boolean IS_RIGHT_DIR_PRIOR_EXIST = false;
-
-
-        EndFlag(String operatorStr, int id) {
-            super(operatorStr, id);
-        }//con_EndFlag
-
-        @Override
-        Operand operate(Operand[] operands) {
-            throw new ShouldNotOperateException(getOperatorStr());
-        }//operate
-
-        @Override
-        int getDimension() {
-            return FLAG_END_DIMENSION;
-        }//getDimension
-
-        @Override
-        boolean isRightDirPriorExist() {
-            return IS_RIGHT_DIR_PRIOR_EXIST;
-        }//isRightDirPriorExist
-
-        @Override
-        boolean isNeedOperate() {
-            return IS_NEED_OPERATE;
-        }//isNeedOperate
-
-        @Override
-        boolean isNeedPush() {
-            return IS_NEED_PUSH;
-        }//isNeedPush
-
-        @Override
-        int getRightDirPriority() {
-            throw new SpecDirPriorNotExistException(getOperatorStr(), "右");
-        }//getRightDirPriority
-    }//class_EndFlag
 }//class_CertainOperator

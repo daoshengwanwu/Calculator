@@ -1,5 +1,6 @@
 package com.daoshengwanwu.math_util.calculator;
 
+
 import com.daoshengwanwu.math_util.calculator.exception.VarAssistHasNoNextValueException;
 import com.daoshengwanwu.math_util.calculator.exception.VarIdentifierAlreadyExistException;
 import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistException;
@@ -14,7 +15,7 @@ public class VariableAssistant {
 
     public VariableAssistant addVariable(String flagStr, double lowerLimit, boolean isLowerOpen
             , double upperLimit, boolean isUpperOpen, double span) {
-        if (mVariablesMap.containsKey(flagStr) || Operand.hasConstant(flagStr)
+        if (hasVariable(flagStr) || Operand.hasConstant(flagStr)
                 || OperatorAssistant.isIdentifierAlreadyExist(flagStr)) {
             throw new VarIdentifierAlreadyExistException();
         }//if

@@ -58,7 +58,8 @@ public class Calculator {
         CertainOperator topOperator;
 
         List<ExpItem> expItems = varAriExp.getExpItemList();
-        while (curIndex < expItems.size()) {
+        int expItemsSize = expItems.size();
+        while (curIndex < expItemsSize) {
             curItem = expItems.get(curIndex);
             
             switch (curItem.getItemType()) {
@@ -112,10 +113,10 @@ public class Calculator {
                 case CLOSE: {
                     topOperator = mOperatorStack.getTop();
                     makeOperate();
-                    
+
                     if (topOperator.getCertainOperatorType() == CertainOperatorType.OPEN) {
                         if (topOperator.getId() == curOperator.getId()) {
-                            if (curOperator.isNeedPush()) {
+                            if (((CertainOperator.CloseOperator)curOperator).isNeedPush()) {
                                 mOperatorStack.push(curOperator);
                             }//if
                             curIndex++;
