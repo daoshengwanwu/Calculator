@@ -6,10 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.daoshengwanwu.math_util.calculator.ExpItem.Operand;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Operator;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.UncertainOperator;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Variable.VariableAssistant;
 import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistException;
 
 
@@ -18,7 +14,6 @@ import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistExceptio
  * 标识符由字母数字下划线组成，不可以数字打头
  * 数字由数字字符和小数点组成
  * 运算符只由特殊字符组成
- * @author 白浩然
  */
 public class VarAriExp {
     private static Set<Character> sOcSet = new HashSet<>();
@@ -48,7 +43,7 @@ public class VarAriExp {
         boolean isNormalIdentifierOpen = false;
         boolean isSpecialIdentifierOpen = false;
 
-        mExpItems.add(Operator.getStartFlag());
+        mExpItems.add(OperatorAssistant.getStartFlag());
         for (curIndex = 0; curIndex < expStr.length(); curIndex++) {
             curChar = expStr.charAt(curIndex);
 
@@ -94,7 +89,7 @@ public class VarAriExp {
                 }
             }
         }
-        mExpItems.add(Operator.getEndFlag());
+        mExpItems.add(OperatorAssistant.getEndFlag());
     }//con_VarAriExp
 
     public VariableAssistant getVariableAssistant() {
@@ -116,7 +111,7 @@ public class VarAriExp {
     }//getExpItemList
     
     private ExpItem analysisNormalIdentifier(String itemStr) {
-        if (Operator.isIdentifierAlreadyExist(itemStr)) {
+        if (OperatorAssistant.isIdentifierAlreadyExist(itemStr)) {
             return analysisOperator(itemStr);
         } else if (Operand.hasConstant(itemStr)) { 
             return Operand.getConstant(itemStr);
@@ -128,7 +123,7 @@ public class VarAriExp {
     }//analysisIdentifier
     
     private ExpItem analysisOperator(String itemStr) {
-        Operator operator = Operator.getOperator(itemStr);
+        Operator operator = OperatorAssistant.getOperator(itemStr);
         if (!operator.isCertain()) {
             operator = ((UncertainOperator)operator).
                     getCertainOperator(mExpItems.get(mExpItems.size() - 1));

@@ -4,18 +4,13 @@ package com.daoshengwanwu.math_util.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.daoshengwanwu.math_util.calculator.ExpItem.Operand;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.CertainOperator;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Operator.CertainOperator.CertainOperatorType;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Variable;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Variable.VariableAssistant;
+import com.daoshengwanwu.math_util.calculator.CertainOperator.CertainOperatorType;
 import com.daoshengwanwu.math_util.calculator.exception.OperatorNotMatchException;
 import com.daoshengwanwu.math_util.calculator.exception.ResultErrorException;
 import com.daoshengwanwu.math_util.calculator.util.Stack;
 
 
 /**
- * @author 白浩然
  * 计算器类，外部通过该类来解析计算算术表达式
  */
 public class Calculator {

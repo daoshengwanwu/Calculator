@@ -2,10 +2,9 @@ package com.daoshengwanwu.launcher;
 
 
 import com.daoshengwanwu.math_util.calculator.AriExp;
-import com.daoshengwanwu.math_util.calculator.Calculator;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Operand;
-import com.daoshengwanwu.math_util.calculator.ExpItem.Variable.VariableAssistant;
 import com.daoshengwanwu.math_util.calculator.VarAriExp;
+import com.daoshengwanwu.math_util.calculator.Calculator;
+import com.daoshengwanwu.math_util.calculator.VariableAssistant;
 
 
 public class Launcher {
@@ -36,11 +35,11 @@ public class Launcher {
         //通过addVariable方法，来添加你对变量的描述，如变量的标识符，取值下限和上限，以及是否是开区间，以及变量变化的跨度
         //比如这里我添加了一个对 'x'变量的描述，其取值下限是-10，其下限不是开区间（也就是闭区间)
         //其取值上限是10，且上限也是闭区间，该变量的变化跨度为0.01
-        varAssist.addVariable("x", Operand.getOperand(-10), false,
-                Operand.getOperand(10), false, Operand.getOperand(0.01))
+        varAssist.addVariable("x", -10, false,
+                10, false, 1)
                 //同样的含义添加变量y的描述
-                .addVariable("y", Operand.getOperand(-5), true,
-                        Operand.getOperand(5), true, Operand.getOperand(0.1));
+                .addVariable("y", -5, true,
+                        5, true, 1);
 
         //注意添加描述时，变量的标识符要与表达式字符串中的变量标识符保持一致，这样才可以解析出来
 
