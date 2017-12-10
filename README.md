@@ -9,7 +9,8 @@ Welcome to the Calculator wiki!
 二、使用方法
 =
 1. 基本功能的使用：
--
+-----
+
 本Calculator目前支持的运算符有(a、b、c均为实数)：
 
 - 1、'+'(加)使用示例：a+b 代表a加b,
