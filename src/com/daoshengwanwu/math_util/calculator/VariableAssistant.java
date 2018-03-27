@@ -13,8 +13,8 @@ public class VariableAssistant {
     private Map<String, Variable> mVariablesMap = new LinkedHashMap<>();
 
 
-    public VariableAssistant addVariable(String flagStr, double lowerLimit, boolean isLowerOpen
-            , double upperLimit, boolean isUpperOpen, double span) {
+    public VariableAssistant addVariable(String flagStr, double lowerLimit, boolean isLowerOpen,
+                                         double upperLimit, boolean isUpperOpen, double span) {
 
         if (OperatorAssistant.isIdentifierAlreadyExist(flagStr) ||
                 Operand.hasConstant(flagStr) || hasVariable(flagStr)) {
@@ -24,9 +24,21 @@ public class VariableAssistant {
 
         mVariablesMap.put(flagStr, new Variable(
                 flagStr,
-                Operand.getOperand(lowerLimit), isLowerOpen,
-                Operand.getOperand(upperLimit), isUpperOpen,
-                Operand.getOperand(span)));
+                lowerLimit, isLowerOpen,
+                upperLimit, isUpperOpen,
+                span));
+
+        return this;
+    }//addVariable
+
+    public VariableAssistant addVariable(String flagStr) {
+        if (OperatorAssistant.isIdentifierAlreadyExist(flagStr) ||
+                Operand.hasConstant(flagStr) || hasVariable(flagStr)) {
+
+            throw new VarIdentifierAlreadyExistException();
+        }//if
+
+        mVariablesMap.put(flagStr, new Variable(flagStr));
 
         return this;
     }//addVariable
@@ -68,4 +80,8 @@ public class VariableAssistant {
 
         throw new VarAssistHasNoNextValueException();
     }//nextValue
+
+    public void clear() {
+        mVariablesMap.clear();
+    }//clear
 }//class_VariableAssistant

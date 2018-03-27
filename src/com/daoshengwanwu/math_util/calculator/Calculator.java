@@ -35,7 +35,7 @@ public class Calculator {
     }//calculate
     
     public ResultGenerator calculate(VarAriExp varAriExp) {
-        return new ResultGenerator(varAriExp);
+        return new ResultGenerator(varAriExp, this);
     }//calculate
 
     /**
@@ -177,9 +177,9 @@ public class Calculator {
         private VariableAssistant mVarAssist;
         
         
-        private ResultGenerator(VarAriExp varAriExp) {
+        private ResultGenerator(VarAriExp varAriExp, Calculator calculator) {
             mVarAriExp = varAriExp;
-            mCalculator = new Calculator();
+            mCalculator = calculator;
             mVarAssist = mVarAriExp.getVariableAssistant();
         }//con_ResultGenerator
 
@@ -222,5 +222,9 @@ public class Calculator {
             
             return resultList;
         }//getResultList
+
+        public VarAriExp getVarAriExp() {
+            return mVarAriExp;
+        }//getVarAriExp
     }//class_ResultGenerator
 }//class_Calculator
