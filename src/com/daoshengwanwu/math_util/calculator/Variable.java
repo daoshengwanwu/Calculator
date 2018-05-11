@@ -129,4 +129,16 @@ public class Variable extends ExpItem {
     public boolean isSet() {
         return mLowerLimit <= mUpperLimit;
     }//isSet
+
+    public double getLowerLimit() {
+        return mLowerLimit;
+    }
+
+    public double getUpperLimit() {
+        return mUpperLimit;
+    }
+
+    public double getSpan() {
+        return mSpan;
+    }
 }//class_Variable

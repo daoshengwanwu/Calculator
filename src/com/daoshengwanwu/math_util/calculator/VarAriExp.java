@@ -18,6 +18,7 @@ import com.daoshengwanwu.math_util.calculator.exception.VariableNotExistExceptio
 public class VarAriExp {
     private static Set<Character> sOcSet = new HashSet<>();
 
+    private String mExpStr;
     private VariableAssistant mVarAssist;
     private List<ExpItem> mExpItems = new ArrayList<>();
     
@@ -32,6 +33,8 @@ public class VarAriExp {
 
 
     public VarAriExp(String expStr, VariableAssistant varAssist) {
+        mExpStr = expStr;
+
         expStr = expStr + " ";
         mVarAssist = varAssist;
 
@@ -98,12 +101,7 @@ public class VarAriExp {
 
     @Override
     public String toString() {
-        StringBuilder resultBuilder = new StringBuilder();
-        for (int i = 1; i < mExpItems.size() - 1; i++) {
-            resultBuilder.append(mExpItems.get(i));
-        }
-
-        return resultBuilder.toString();
+        return mExpStr;
     }//toString
     
     List<ExpItem> getExpItemList() {
