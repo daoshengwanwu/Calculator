@@ -44,11 +44,11 @@ public class VariableAssistant {
     }//addVariable
 
     public Variable getVariable(String flagStr) {
-        if (hasVariable(flagStr)) {
-            return mVariablesMap.get(flagStr);
-        }//if
+        if (!hasVariable(flagStr)) {
+            addVariable(flagStr);
+        }
 
-        throw new VariableNotExistException(flagStr);
+        return mVariablesMap.get(flagStr);
     }//getVariable
 
     public VariableAssistant removeVariable(String flagStr) {

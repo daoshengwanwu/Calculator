@@ -32,11 +32,18 @@ public class VarAriExp {
     }//static
 
 
+    public VarAriExp(String expStr) {
+        this(expStr, null);
+    }
+
     public VarAriExp(String expStr, VariableAssistant varAssist) {
         mExpStr = expStr;
 
         expStr = expStr + " ";
         mVarAssist = varAssist;
+        if (mVarAssist == null) {
+            mVarAssist = new VariableAssistant();
+        }
 
         int curIndex;
         char curChar;
@@ -95,9 +102,18 @@ public class VarAriExp {
         mExpItems.add(OperatorAssistant.getEndFlag());
     }//con_VarAriExp
 
+    public VarAriExp setVariableValue(String flagStr, double value) {
+        mVarAssist.getVariable(flagStr).setCurValue(value);
+        return this;
+    }
+
     public VariableAssistant getVariableAssistant() {
         return mVarAssist;
     }//getVariableAssistant
+
+    public Variable getVariable(String flagStr) {
+        return mVarAssist.getVariable(flagStr);
+    }
 
     @Override
     public String toString() {
@@ -113,11 +129,9 @@ public class VarAriExp {
             return analysisOperator(itemStr);
         } else if (Operand.hasConstant(itemStr)) { 
             return Operand.getConstant(itemStr);
-        } else if (null != mVarAssist) {
-            return mVarAssist.getVariable(itemStr);
         } else {
-            throw new VariableNotExistException(itemStr);
-        }//if-else
+            return mVarAssist.getVariable(itemStr);
+        }
     }//analysisIdentifier
     
     private ExpItem analysisOperator(String itemStr) {

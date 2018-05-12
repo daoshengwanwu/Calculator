@@ -11,6 +11,7 @@ public class Variable extends ExpItem {
     private double mLowerLimit;
     private double mSpan;
     private double mCurValue;
+    private boolean mIsValueSet = false;
 
 
     Variable(String flagStr) {
@@ -50,8 +51,8 @@ public class Variable extends ExpItem {
     }//nextValue
 
     public double curValue() {
-        if (!isSet()) {
-            throw new VariableNotSetException();
+        if (!mIsValueSet) {
+            throw new VariableValueNotInitException();
         }//if
 
         return mCurValue;
@@ -72,7 +73,9 @@ public class Variable extends ExpItem {
     }
 
     public void reset() {
-        mCurValue = mLowerLimit;
+        if (isSet()) {
+            mCurValue = mLowerLimit;
+        }
     }
 
     public void set(double dLowerLimit, boolean isLowerOpen
@@ -115,10 +118,12 @@ public class Variable extends ExpItem {
         mLowerLimit = lowerLimit.getValue();
 
         mCurValue = mLowerLimit;
+        mIsValueSet = true;
     }
 
     public void setCurValue(double curValue) {
         mCurValue = curValue;
+        mIsValueSet = true;
     }
 
     @Override

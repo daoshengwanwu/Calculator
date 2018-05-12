@@ -44,7 +44,7 @@ public class Calculator {
      * @param varAriExp 要计算的表达式
      * @return 计算结果
      */
-    private double calculateCurrentValue(VarAriExp varAriExp) {
+    public double calculateCurrentValue(VarAriExp varAriExp) {
         //每次计算前清空运算符栈和操作数栈
         mOperandStack.clear();
         mOperatorStack.clear();
